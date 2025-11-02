@@ -49,11 +49,12 @@ pip install -r requirements.txt
 Due to their size, the core dataset and generated model/index files are not included in this repository. You will need to acquire and place them as follows:
 
 - **ScienceQA Dataset**:
+  - You can download the dataset from https://drive.google.com/drive/folders/16kuhXdM-MOhYcFIyRj91WvnDnjnF-xHw. For simplicity and efficiency, we currently only use the test split of the dataset.
   - **`problems.json`**: This file contains the questions, choices, and other text data. It should be placed inside the `adaptive-alpha/` directory.
   - **Images**: The image files corresponding to the problems should be placed in a directory structure like `images/test/<problem_id>/image.png`.
 
 - **Analysis Results (for training)**:
-  - To train the dynamic alpha model from scratch, you first need to generate the analysis data.
+  - To train the dynamic alpha model from scratch, you first need to generate the analysis data. Everything about adaptive-alpha folder training details are uploaded to https://drive.google.com/drive/folders/1qNMVsVL24dOC3K0kHSxyRdv0DSHPlxr6?usp=sharing, including dataset, fine-tuned models and training statistics. You can directly utilize the documents there.
   - This project assumes a pre-existing directory `adaptive-alpha/analysis_results/` populated with JSON files. These files are the output of `adaptive-alpha/analyze_questions.py`, which you would need to adapt and run on the ScienceQA dataset to determine the ground-truth `image_dependence` for each question.
 
 ### 4. Training and Pre-computation
