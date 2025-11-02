@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal RAG</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; max-width: 800px; margin: auto; padding: 20px; }
+        h1 { text-align: center; }
+        form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; border: 1px solid #eee; padding: 20px; border-radius: 5px;}
+        #query { width: 100%; padding: 8px; box-sizing: border-box; }
+        #image { padding: 8px; }
+        .mode-selection { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
+        button { padding: 10px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; }
+        #results { margin-top: 1em; }
+        .result-item { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+        .result-item img { max-width: 100%; height: auto; border-radius: 5px; margin-top: 10px; }
+        .scores { font-size: 0.9em; color: #555; margin-top: 10px; background-color: #f9f9f9; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Multimodal RAG System</h1>
+    <form id="rag-form" enctype="multipart/form-data">
+        <label for="query">Text Query:</label>
+        <input type="text" id="query" name="query" placeholder="Enter your text query...">
+        
+        <label for="image">Image Query (Optional):</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        
+        <div class="mode-selection">
+            <strong>Fusion Mode:</strong>
+            <label><input type="radio" name="mode" value="fixed" checked> Fixed Ratio (0.7/0.3)</label>
+            <label><input type="radio" name="mode" value="dynamic"> Dynamic Ratio</label>
+        </div>
+        
+        <button type="submit">Search</button>
+    </form>
+    <div id="results">
+        <!-- Results will be displayed here -->
+    </div>
+
+    <script>
+        document.getElementById('rag-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const queryInput = document.getElementById('query');
+            const imageInput = document.getElementById('image');
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            const resultsDiv = document.getElementById('results');
+            
+            resultsDiv.innerHTML = 'Searching...';
+
+            const formData = new FormData();
+            formData.append('query', queryInput.value);
+            formData.append('mode', mode);
+            
+            if (imageInput.files.length > 0) {
+                formData.append('image', imageInput.files[0]);
+            }
+
+            try {
+                const response = await fetch('/api/rag', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                    return;
+                }
+
+                let html = '<h2>Results:</h2>';
+
+                // Display the alpha used for the search
+                if (data.alpha_used !== undefined) {
+                    let mode_text = mode === 'dynamic' ? `Dynamic (Text Weight: ${data.alpha_used.toFixed(4)})` : 'Fixed';
+                    html += `<em>Search Mode: ${mode_text}</em>`;
+                }
+
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(result => {
+                        html += '<div class="result-item">';
+                        
+                        const formattedText = result.candidate.formatted_text.replace(/\n/g, '<br>');
+                        html += `<p>${formattedText}</p>`;
+                        
+                        if (result.candidate.image_path) {
+                            html += `<img src="/static/${result.candidate.image_path}" alt="Candidate Image">`;
+                        }
+
+                        html += '<div class="scores">';
+                        html += `<p><b>Fused Score: ${result.fused_score.toFixed(4)}</b></p>`;
+                        html += `<p>(Text Score: ${result.text_score.toFixed(4)}, Image Score: ${result.image_score.toFixed(4)})</p>`;
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                } else {
+                    html += '<p>No results found.</p>';
+                }
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = `<p>A network or server error occurred: ${error}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
