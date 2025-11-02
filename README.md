@@ -105,3 +105,29 @@ Navigate to `http://127.0.0.1:5001` in your web browser to use the application.
 ├── requirements.txt        # Python dependencies
 └── README.md               # This file
 ```
+
+## TODO (Possibly, could be something else)
+
+### 1.Improve UI Design
+The current web interface is functional but visually minimal.
+Add styled result cards, thumbnails for retrieved images, and progress bars to visualize dynamic α weights.
+Consider lightweight UI frameworks (e.g., Bootstrap or Tailwind CSS) for a cleaner, more modern layout.
+
+### 2.Implement Reranking Module
+Introduce a cross-encoder reranker on top of the top-K retrieval results.
+Example candidates:
+
+Text: bge-reranker-v2-m3 or colbert-x
+
+Image: CLIP cross-encoder scoring
+This should refine retrieval precision without major latency overhead.
+
+### 3.Ablation and Evaluation Experiments
+Conduct systematic experiments comparing different retrieval configurations:
+
+- Text-only retrieval
+
+- Fixed α (e.g., 0.7/0.3) fusion
+
+- Dynamic α (predicted by the BERT regression model)
+Evaluate using Recall@K and visualize performance differences to highlight the effectiveness of adaptive fusion.
