@@ -1,0 +1,10 @@
+scifact_corpus_source/scifact-train.parquet filter=lfs diff=lfs merge=lfs -text
+scifact_claims_source/train/index.duckdb filter=lfs diff=lfs merge=lfs -text
+scifact_claims_source/test/index.duckdb filter=lfs diff=lfs merge=lfs -text
+scifact_claims_source/validation/index.duckdb filter=lfs diff=lfs merge=lfs -text
+scifact_corpus_source/train/index.duckdb filter=lfs diff=lfs merge=lfs -text
+scifact_labelprediction_bigbio_pairs/train/index.duckdb filter=lfs diff=lfs merge=lfs -text
+scifact_labelprediction_bigbio_pairs/validation/index.duckdb filter=lfs diff=lfs merge=lfs -text
+scifact_rationale_bigbio_pairs/validation/index.duckdb filter=lfs diff=lfs merge=lfs -text
+scifact_rationale_bigbio_pairs/train/index.duckdb filter=lfs diff=lfs merge=lfs -text
+scifact_corpus_source/train/0000.parquet filter=lfs diff=lfs merge=lfs -text

@@ -80,17 +80,17 @@ def precompute_embeddings():
         print("No texts to encode. Aborting.")
         return
 
-    # print(f"\n3. Encoding {len(texts_for_encoding)} texts... (This may take a while)")
-    # # Perform encoding
-    # # Note: If this step fails, the underlying torch/transformer installation might be unstable.
-    # try:
-    #     text_embeddings = retriever.encode_text(texts_for_encoding)
-    # except Exception as e:
-    #     print(f"FATAL: Failed to encode texts. Error: {e}")
-    #     print("This is likely an issue with your PyTorch or transformers library installation.")
-    #     return
+    print(f"\n3. Encoding {len(texts_for_encoding)} texts... (This may take a while)")
+    # Perform encoding
+    # Note: If this step fails, the underlying torch/transformer installation might be unstable.
+    try:
+        text_embeddings = retriever.encode_text(texts_for_encoding)
+    except Exception as e:
+        print(f"FATAL: Failed to encode texts. Error: {e}")
+        print("This is likely an issue with your PyTorch or transformers library installation.")
+        return
 
-    # print(f"Successfully encoded {text_embeddings.shape[0]} texts.")
+    print(f"Successfully encoded {text_embeddings.shape[0]} texts.")
 
     # This is memory intensive, so we do it in batches.
     print(f"\n3b. Encoding {len(image_paths_for_encoding)} images in batches... (This may also take a while)")
@@ -147,8 +147,8 @@ def precompute_embeddings():
 
     print("\n4. Saving embeddings and mapping file...")
     # Save the text embeddings tensor
-    # torch.save(text_embeddings, 'text_embeddings.pt')
-    # print("Text embeddings saved to 'text_embeddings.pt'.")
+    torch.save(text_embeddings, 'text_embeddings.pt')
+    print("Text embeddings saved to 'text_embeddings.pt'.")
 
     # Save the image embeddings tensor
     torch.save(image_embeddings, 'image_embeddings.pt')
