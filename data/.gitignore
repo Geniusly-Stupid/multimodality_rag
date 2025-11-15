@@ -1,0 +1,12 @@
+# Ignore SciFact LFS-tracked files
+
+scifact_corpus_source/scifact-train.parquet
+scifact_claims_source/train/index.duckdb
+scifact_claims_source/test/index.duckdb
+scifact_claims_source/validation/index.duckdb
+scifact_corpus_source/train/index.duckdb
+scifact_labelprediction_bigbio_pairs/train/index.duckdb
+scifact_labelprediction_bigbio_pairs/validation/index.duckdb
+scifact_rationale_bigbio_pairs/validation/index.duckdb
+scifact_rationale_bigbio_pairs/train/index.duckdb
+scifact_corpus_source/train/0000.parquet
