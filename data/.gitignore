@@ -10,3 +10,9 @@ scifact_labelprediction_bigbio_pairs/validation/index.duckdb
 scifact_rationale_bigbio_pairs/validation/index.duckdb
 scifact_rationale_bigbio_pairs/train/index.duckdb
 scifact_corpus_source/train/0000.parquet
+#
+# Ignore all files within this data directory
+*
+
+# Allow this .gitignore itself to be tracked
+!.gitignore
