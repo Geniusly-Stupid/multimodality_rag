@@ -87,6 +87,21 @@ project_root/
 
 ## Running the System
 
+### 0. Download the Data
+
+You have two options:
+
+1. **Direct Download**
+   Download all processed data from:
+   [https://drive.google.com/drive/folders/1u30jS1L_jNXX04HAEoVsrMO-XLP0B9v4?usp=drive_link](https://drive.google.com/drive/folders/1u30jS1L_jNXX04HAEoVsrMO-XLP0B9v4?usp=drive_link)
+
+2. **Rebuild the Frames Wiki Dataset Manually**
+   If you prefer to generate the Frames Wikipedia dataset yourself, run:
+
+   ```
+   python tools/build_frames_wiki_dataset.py
+   ```
+
 ### 1. Build the Frames FAISS index
 
 ```bash
