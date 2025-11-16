@@ -1,0 +1,205 @@
+The FGM-148 Javelin, or Advanced Anti-Tank Weapon System-Medium (AAWS-M), is an American-made man-portable anti-tank system in service since 1996 and continuously upgraded. It replaced the M47 Dragon anti-tank missile in US service. Its fire-and-forget design features automatic infrared guidance, allowing the user to seek cover immediately after launch, in contrast to wire-guided systems like the system used by the Dragon, which require a user to guide the weapon throughout the engagement. The Javelin's high-explosive anti-tank (HEAT) warhead can defeat modern tanks by top-down attack, hitting them from above, where their armor is thinnest, and is useful against fortifications in a direct attack flight. The Javelin uses a tandem charge warhead to circumvent an enemy tank's explosive reactive armor (ERA), which would normally render HEAT warheads ineffective.
+As of 2019, according to claims by the manufacturer, the Javelin had been used in around five thousand successful engagements. By August 2021, fifty thousand missiles had been delivered to customers.
+The weapon made its combat debut in Iraq in 2003 and rose to prominence in the Russo-Ukrainian War, where it saw extensive usage by Ukrainian forces during the early stages of the 2022 Russian invasion.
+
+Overview
+Javelin is a fire-and-forget missile with lock-on before launch and automatic self-guidance. The system employs a top attack flight profile against armored vehicles, attacking the usually thinner top armor, but can also make a direct attack, for use against buildings, targets too close for top attack, targets under obstructions, and helicopters.
+It can reach a peak altitude of 150 m (490 ft) in top attack mode and 60 m (200 ft) in direct attack mode. Initial versions had a range of 2,000 m (6,600 ft), later increased to 2,500 m (8,200 ft). It is equipped with an imaging infrared seeker. The tandem warhead is fitted with two shaped charges: a precursor warhead to detonate any explosive reactive armor and a primary warhead to penetrate base armor.
+In what is known as a "soft launch arrangement", the missile is ejected from the launcher to a safe distance from the operator before the main rocket motors ignite. This makes it harder to identify the launcher, though backblast from the launch tube still poses a hazard to nearby personnel. The firing team may move as soon as the "fire-and-forget" missile has been launched or immediately prepare to fire on their next target.
+The missile system is sometimes carried by two soldiers consisting of a gunner and an ammunition bearer, although one soldier can fire it. While the gunner aims and fires the missile, the ammunition bearer scans for prospective targets, watches for threats like enemy vehicles or troops and ensures that personnel and obstacles are clear of the missile's launch backblast.
+
+Development
+In 1983, the United States Army introduced its AAWS-M (Advanced Anti-Tank Weapon System—Medium) requirement. In 1985, the AAWS-M was approved for development. In August 1986, the proof-of-principle (POP) phase of development began, with a US$30 million contract awarded for technical proof demonstrators: Ford Aerospace (laser-beam riding), Hughes Aircraft Missile System Group (imaging infrared combined with a fiber-optic cable link) and Texas Instruments (imaging infrared). In late 1988, the POP phase ended. In June 1989, the full-scale development contract was awarded to a joint venture of Texas Instruments and Martin Marietta, now Raytheon and Lockheed Martin. The AAWS-M received the designation of FGM-148.
+
+In April 1991, the first test-flight of the Javelin succeeded, and in March 1993, the first test-firing from the launcher succeeded. In 1994, low levels of production were authorized, and the first Javelins were deployed with US Army units in 1996.
+
+Test and evaluation
+The General Accounting Office (GAO), since renamed Government Accountability Office, published a report questioning the adequacy of Javelin testing. 
+
+involving operational testers early in development;
+use of modelling and simulation;
+integrating development and operational testing;
+combining testing and training.
+The late-phase development of the Javelin retroactively benefited from the then-new operational test initiatives set forth by the Secretary of Defense, as well as a further test conducted as a consequence of the Army's response to the GAO report. Before it was fielded to the 3rd Battalion of the 75th Ranger Regiment at Fort Benning (and later Special Forces, airborne, air assault, and light infantry units), the Javelin was subjected to limited parts of the five operational test and evaluation initiatives, as well as a portability operational test program, an additional test phase of the so-called Product Verification Test, which included live firings with the full-rate configuration weapon.
+The Institute for Defense Analyses and the Defense Department's Director of Operational Test and Evaluation became involved in three development test activities, including 
+
+reviewing initial operational test and evaluation plans;
+monitoring initial operational test and evaluation;
+structuring follow-on test and evaluation activities.
+
+Qualification testing
+The Javelin Environmental Test System (JETS) is a mobile test set for Javelin All-Up-Round (AUR) and the Command Launch Unit (CLU). It can be configured to functionally test the AUR or the CLU individually or both units in a mated tactical mode. This mobile unit may be repositioned at the various environmental testing facilities. The mobile system is used for all phases of Javelin qualification testing. There is a non-mobile JETS used for stand-alone CLU testing. This system is equipped with an environmental chamber and is primarily used for Product Verification Testing (PRVT). Capabilities include: Javelin CLU testing; Javelin AUR testing; Javelin Mated Mode testing; Javelin testing in various environmental conditions; and CLU PRVT.
+The all-up-round test sets include: extreme temperature testing; missile tracker testing (track rate error, tracking sensitivity); seeker/focal plane array testing (cool-down time, dead/defective pixels, seeker identification); pneumatic leakage; continuity measurements; ready time; and guidance sections (guidance commands, fin movement).
+
+Components
+The system consists of three main components: the Command Launch Unit, the Launch Tube Assembly and the missile itself. Each missile contains 250 microprocessors.
+
+Command launch unit
+The gunner carries a reusable command launch unit (CLU, pronounced "clue"), which is the targeting component of the two-part system. The CLU has three views, which are used to find, target, and fire the missile and may be used separately from the missile as a portable thermal sight. Infantry personnel are no longer required to stay in constant contact with armored personnel carriers and tanks with thermal sights. This makes them more flexible and able to perceive threats they would not otherwise be able to detect. In 2006, a contract was awarded to Toyon Research Corporation to begin development of an upgrade to the CLU, enabling the transmission of target image and GPS location data to other units.
+
+Day field of view
+The first view is a 4× magnification day view. It is mainly used to scan areas in visible light during daylight operation. It is also used to scan immediately before sunrise and after sunset, when it is difficult to focus the thermal image due to the natural rapid heating or cooling of the environment.
+
+Wide field of view
+The second view is the 4× magnification night view, a wide field of view (WFOV) which shows the gunner a thermal representation of the area viewed. This is the primary view used, due to its ability to detect infrared radiation and find both troops and vehicles otherwise too well hidden to detect. The screen shows a "green scale" view which can be adjusted in both contrast and brightness. The inside of the CLU is cooled by a small refrigeration unit attached to the sight. This greatly increases the sensitivity of the thermal imaging capability, since the temperature inside the sight is much lower than that of the objects it detects.
+Due to the sensitivity this causes, the gunner is able to "focus" the CLU to show a detailed image of the area being viewed, by showing temperature differences of only a few degrees. The gunner operates this view with the use of two hand stations similar to the control stick found in modern cockpits. It is from this view that the gunner focuses the image and determines the area that gives the best heat signature on which to lock the missile.
+
+Narrow field of view
+The third field of view is a 12× thermal sight, used to better identify the target vehicle. Once the CLU has been focused in WFOV, the gunner may switch to a narrow field of view (NFOV) for target recognition before activating the seeker FOV.
+Once the best target area is chosen, the gunner presses one of the two triggers and is automatically switched to the fourth view, the seeker FOV, which is a 9x magnification thermal view. This process is similar to the automatic zoom feature on most modern cameras. This view is available along with the previously mentioned views, all of which may be accessed with the press of a button. However, it is not as commonly used as a high-magnification view, because it takes longer to scan a wide area.
+This view allows the gunner to further aim the missile and set the guidance system housed inside it. It is when in this view that information is passed from the CLU, through the connection electronics of the launch tube assembly, and into the missile's guidance system. If the gunner decides not to fire the missile immediately, they can cycle back to the other views without firing. When the gunner is satisfied with the target picture, a second trigger is pulled to establish a "lock". The missile launches after a short delay.
+
+Lightweight CLU
+The US Army developed a new CLU as an improvement over the Block I version. The new CLU is 70% smaller, 40% lighter and has a 50% battery life increase. Features of the lightweight CLU are: a long-wave infrared (IR) thermographic camera; a high-definition display with improved resolution; integrated handgrips; a five-megapixel color camera; a laser point that can be seen visibly or through IR; a far target locator using GPS, a laser rangefinder, a heading sensor, and modernized electronics. The LW CLU has demonstrated the ability to fire a FIM-92 Stinger anti-aircraft missile, using its superior optics to identify and destroy small unmanned aerial vehicles (UAVs). Compared to the Block I Command Launch Unit (CLU), the Lightweight CLU will double target identification range and increase system engagement range from 2.5 kilometers (km) to 4 km.
+The Javelin Joint Venture received its first low-rate production contract for the LW CLU in June 2022. 200 units will be delivered before full-rate production is expected to initiate in 2023, which will increase the production rate to 600 per year. First delivery is slated for 2025.
+
+Launch tube assembly
+Both the gunner and the ammunition bearer carry the Launch Tube Assembly, a disposable tube that houses the missile and protects the missile from harsh environments. The tube has built-in electronics and a locking hinge system that makes attachment and detachment of the missile to and from the Command Launch Unit a quick and simple process.
+
+Missile
+Warhead
+The Javelin missile's tandem warhead is a high-explosive anti-tank (HEAT) type. This round utilizes an explosive shaped charge to create a stream of superplastically deformed metal, formed from trumpet-shaped metallic liners. The result is a narrow high velocity particle stream that can penetrate armor.
+The Javelin counters the advent of explosive reactive armor (ERA). ERA boxes or tiles lying over a vehicle's main armor explode when struck by a warhead. This explosion does not harm the vehicle's main armor, but causes steel panels to fly across the path of a HEAT round's narrow particle stream, disrupting its focus and leaving it unable to cut through the main armor. The Javelin uses two shaped-charge warheads in tandem. The weak, smaller diameter HEAT precursor charge detonates the ERA, clearing the way for the much larger diameter HEAT warhead, which then penetrates the target's primary armor.
+A two-layered molybdenum liner is used for the precursor, and a copper liner for the main warhead.
+To protect the main charge from the explosive blast, shock, and debris caused by the impact of the missile's nose and the detonation of the precursor charge, a blast shield is used between the two charges. This was the first composite material blast shield and the first that had a hole through the middle to provide a jet that is less diffuse.
+A newer main charge liner produces a higher velocity jet. While making the warhead smaller, this change makes it more effective, leaving more room for propellant for the main rocket motor, increasing the missile's range.
+Electronic arming and fusing, called Electronic Safe Arming and Fire (ESAF), is present on the Javelin. The ESAF system enables the firing and arming process to proceed, while imposing a series of safety checks on the missile. ESAF cues the launch motor after the trigger is pulled. When the missile reaches a key acceleration point, indicating that it has cleared the launch tube, the ESAF initiates a second arming signal to fire the flight motor. After another check on missile conditions (target lock check), ESAF initiates final arming to enable the warheads for detonation upon target impact. When the missile strikes the target, ESAF enables the tandem warhead function, to provide appropriate time between the detonation of the precursor charge and the detonation of the main charge.
+Though the Javelin's tandem HEAT warhead has proven efficient at destroying tanks, most threats it was employed against in Iraq and Afghanistan were weapon crews and teams, buildings, and lightly armored and unarmored vehicles. To make the Javelin more useful in these scenarios, the Aviation and Missile Research, Development, and Engineering Center developed a multi-purpose warhead (MPWH) for the FGM-148F. While it is still lethal against tanks, the new warhead has a naturally fragmenting steel warhead case, that doubles the effectiveness against personnel due to enhanced fragmentation. The MPWH does not add weight or cost and has a lighter composite missile mid-body to enable drop-in replacement to existing Javelin tubes. The Javelin F-model was planned to begin deliveries in early 2020. The improved missile design, along with new lighter CLU with an improved target tracker, entered production in May 2020.
+
+Propulsion
+Most rocket launchers require a large clear area behind the gunner to prevent injury from backblast. To address this shortcoming without increasing recoil to an unacceptable level, the Javelin system uses a soft launch mechanism. A small launch motor using conventional rocket propellant ejects the missile from the launcher, but stops burning before the missile clears the tube. The flight motor is ignited after a delay to allow sufficient clearance from the operator.
+To save weight, the two motors are integrated with a burst disc between them. It is designed to tolerate the pressure of the launch motor from one side, but to easily rupture from the other when the flight motor ignites. The motors use a common nozzle. The flight motor's exhaust flows through the expended launch motor. Because the launch motor casing remains in place, an unusual ring-shaped igniter is used to start it. A normal igniter would be blown out of the back of the missile when the flight motor ignited and could injure the operator.
+Since the launch motor uses a standard NATO propellant, the presence of lead beta-resorcylate as a burn rate modifier causes an amount of lead and lead oxide to be present in the exhaust. Gunners are asked to hold their breath after firing for their safety.
+In the event that the launch motor malfunctions and the launch tube is overpressurized—for example, if the rocket gets stuck—the Javelin missile includes a pressure release system to prevent the launcher from exploding. The launch motor is held in place by a set of shear pins, which fracture if the pressure rises too high. They allow the motor to be pushed out of the back of the tube.
+
+Seeker
+As a fire-and-forget missile, after launch the missile has to be able to track and destroy its target without assistance from the gunner. This is done by coupling an onboard imaging IR system, separate from CLU imaging system, with an onboard tracking system.
+The gunner uses the CLU's IR system to find and identify the target, then switches to the missile's independent IR system to set a track box around the target and establish a lock. The gunner places brackets around the image for locking.
+The seeker stays focused on the target's image, continuing to track it as the target moves or the missile's flight path alters, or attack angles change. The seeker consists of three main components: focal plane array image sensor, cooling and calibration, and stabilization.
+
+Focal plane array (FPA)
+The seeker assembly is encased in a dome that is transparent to long-wave infrared radiation. The IR radiation passes through the dome and then through lenses that focus the energy. The IR energy is reflected by mirrors on to the FPA. The seeker is a two-dimensional staring FPA of 64×64 MerCad (HgCdTe) detector elements. The FPA processes the signals from the detectors and relays a signal to the missile's tracker.
+The staring array is a photo-voltaic device where the incident photons stimulate electrons and are stored, pixel by pixel, in readout integrated circuits attached at the rear of the detector. These electrons are converted to voltages that are multiplexed out of the ROIC on a frame-by-frame basis.
+
+Cooling/calibration
+To function effectively, the FPA must be cooled and calibrated. In other applications, a CLU's IR detectors are cooled using a Dewar flask and a closed-cycle Stirling engine, but there is insufficient space in the missile for a similar solution. Prior to launch, a cooler mounted on the outside of the launch tube activates the electrical systems in the missile, and supplies cold gas from a Joule-Thomson expander to the missile detector assembly, while the missile is still in the launch tube. When the missile is fired, this external connection is broken and coolant gas is supplied internally by an onboard argon gas bottle. The gas is held in a small bottle at high pressure and contains enough coolant for the duration of the flight of approximately 19 seconds.
+The seeker is calibrated using a chopper wheel. This device is a fan of six blades: five black blades with low IR emissivity and one semi-reflective blade. These blades spin in front of the seeker optics in a synchronized fashion such that the FPA is continually provided with points of reference in addition to viewing the scene. These reference points allow the FPA to reduce noise introduced by response variations in the detector elements.
+
+Stabilization
+The platform on which the seeker is mounted must be stabilized with respect to the motion of the missile body, and the seeker must be moved to stay aligned with the target. The stabilization system must cope with rapid acceleration, up/down and lateral movements. This is done by a gimbal system, accelerometers, spinning-mass gyros (or MEMS), and motors to drive changes in position of the platform. The system is basically an autopilot. Information from the gyros is fed to the guidance electronics, which drive a torque motor attached to the seeker platform to keep the seeker aligned with the target. The wires that connect the seeker with the rest of the missile are carefully designed to avoid inducing motion or drag on the seeker platform.
+
+Tracker
+The tracker is key to guidance/control for an eventual hit. The signals from each of the 4,096 detector elements (64×64 pixel array) in the seeker are passed to the FPA readout integrated circuits which reads then creates a video frame that is sent to the tracker system for processing. By comparing the individual frames, the tracker determines the need to correct so as to keep the missile on target. The tracker must be able to determine which portion of the image represents the target.
+The target is initially defined by the gunner, who places a configurable frame around it. The tracker then uses algorithms to compare that region of the frame based on image, geometric, and movement data to the new image frames being sent from the seeker, similar to pattern recognition algorithms. At the end of each frame, the reference is updated. The tracker is able to keep track of the target even though the seeker's point of view can change radically in the course of flight.
+The missile is equipped with four movable tail fins and eight fixed wings at mid-body. To guide the missile, the tracker locates the target in the current frame and compares this position with the aim point. If this position is off center, the tracker computes a correction and passes it to the guidance system, which makes the appropriate adjustments to the four movable tail fins. This is an autopilot. To guide the missile, the system has sensors that check that the fins are positioned as requested. If not, the deviation is sent back to the controller for further adjustment. This is a closed-loop controller.
+There are three stages in the flight managed by the tracker: 1) an initial phase just after launch; 2) a mid-flight phase that lasts for most of the flight; and 3) a terminal phase in which the tracker selects the most effective point of impact. With guidance algorithms, the autopilot uses data from the seeker and tracker, to determine when to transition the missile from one phase of flight to another. Depending on whether the missile is in top attack or direct attack mode, the profile of the flight can change significantly.
+The top attack mode requires the missile to climb sharply after launch and cruise at high altitude, then dive on the top of the target (curveball). In direct attack mode (fastball), the missile cruises at a lower altitude directly at the target. The flight path takes into account the range to the target, calculated by the guidance unit.
+
+Training
+A great familiarity of each control and swift operation needs to be achieved before the unit can be deployed efficiently. American troops are trained on the system at the Infantry School in Fort Moore, Georgia, for two weeks. The soldiers are taught basic care and maintenance, operation and abilities, assembly and disassembly, and the positions it can be fired from. Soldiers are taught to distinguish between a variety of vehicle types, even when only a rough outline is visible.
+The soldiers must accomplish several timed drills with set standards, before being qualified to operate the system in both training and wartime situations. There are smaller training programs set up on most army bases that instruct soldiers on the proper use of the system. At these courses, the training program might be changed in small ways. This is most commonly only minor requirements left out due to budget, the number of soldiers vs. simulation equipment, and available time and resources. Both types of training courses have required proficiency levels that must be met before the soldier can operate the system in training exercises or wartime missions.
+
+Combat history
+The Javelin was used by the US Army, the US Marine Corps and the Australian Special Forces in the 2003 invasion of Iraq, on Iraqi Type 69 and Lion of Babylon tanks. During the Battle of Debecka Pass, a platoon of US Army Special Forces operators equipped with Javelins destroyed two T-55 tanks, eight armored personnel carriers, and four troop transport trucks.
+
+During the War in Afghanistan, the Javelin was used effectively in counter-insurgency (COIN) operations. Initially, soldiers perceived the weapon as unsuitable for COIN due to its destructive power, but trained gunners were able to make precision shots against enemy positions with little collateral damage. The Javelin filled a niche in US weapons systems against DShK heavy machine guns and B-10 recoilless rifles—weapons like the AT4 and the M203 grenade launcher were powerful enough, but the ~300 m range was insufficient. Conversely, while medium and heavy machine guns and automatic grenade launchers had the range, they lacked the power, and heavy mortars, which had both a good range and more than enough power, were not accurate enough.
+The Javelin had enough range, power, and accuracy for dismounted infantry to counter standoff engagement tactics employed by enemy weapons. With good locks, the missile is most effective against vehicles, caves, fortified positions, and individual personnel. If enemy forces were inside a cave, a Javelin fired into the mouth of the cave would destroy it from the inside, which was not possible from the outside using heavy mortars. The psychological effect of the sound of a Javelin firing, sometimes caused insurgents to disengage and flee their position. Even when not firing, the Javelin's CLU was commonly used as a man-portable surveillance system.
+In February 2016, during the al-Shaddadi offensive of the Syrian Civil War, a Javelin was used to blow up an attacking suicide car bomb.
+In 2016, claims were posted on social media that the Syrian Kurdish People's Protection Units (YPG) may have received Javelin missiles. By June 2018, it was still unconfirmed if the YPG were fielding Javelin missiles, although US Special Forces units were seen operating them in support of Syrian Democratic Forces (SDF) advances during the Deir ez-Zor campaign in the Middle Euphrates River Valley.
+In June 2019, forces of the Libyan Government of National Accord captured four Javelins from the forces of the Libyan National Army. These missiles had been provided by the UAE.
+During the Russian invasion of Ukraine, NATO provided thousands of Javelins to Ukraine, where they proved highly effective. Javelins have been responsible for a part of the thousands of Russian armored vehicles that Ukraine has destroyed, captured or damaged. The Pentagon claimed that of the first 112 Javelins fired by the Ukrainians since the start of the war, 100 missiles had hit their target. An image dubbed "Saint Javelin", which shows the Virgin Mary holding a Javelin launcher in the style of an Eastern Orthodox church painting, gained social media attention, and soon became a symbol of the Ukrainian resistance against the Russian invasion.
+An unknown number of Javelin launch tube assemblies were captured by the Russian armed forces during the conflict. It is unclear if any of the captured launchers contained live rounds, or were simply tubes discarded after being used. Iran reportedly received an example of the Javelin missile from Russia, along with other Western munitions captured in Ukraine, as part of a larger deal for Shahed and Mohajer drones.
+In April 2022 commentary from the Center for Strategic and International Studies (CSIS), concerns were raised over the US stock of Javelin missiles. According to CSIS, the US had used close to one-third of its Javelin missiles. 7,000 had been supplied, with the United States buying Javelins at the rate of about 1,000 a year. The maximum production rate is 6,480 a year, but it would likely take a year or more to reach that level. Orders take 32 months to deliver. The report concluded that it would take about three or four years to replace the missiles that had been sent to Ukraine. The missile production rate could be increased greatly with a national procurement effort.
+In May 2022, Lockheed Martin CEO James Taiclet stated that Lockheed would nearly double the production of Javelins to 4,000 a year. Ukrainian officials estimated that up to 500 missiles per day were being used in the early days of the war. In August 2022, the US committed to sending an additional 1,000 Javelin missiles to Ukraine.
+
+Variants
+FGM-148A: Initial small batch in 1996.
+FGM-148B: Unclear. Likely the Enhanced Producibility Program (EPP) design introduced before the Javelin's Milestone III.
+FGM-148C: 1999, probably the Javelin Enhanced Tandem Integration (JETI) modification. DoD claims "enhancements that alter the missile dome". Described as "Block 0" by Janes.
+FGM-148D: Export version.
+"Block 1": 2006. Faster and more lethal missiles, a new "Block I CLU" providing increased ID range and surveillance time. Janes claims this is the same as FGM-148E.
+FGM-148E: Replaced electronic components in the control actuator section of the missile, for cost and weight savings. Developed as "Spiral 1" in 2013–14. Production started in 2017.
+FGM-148F: Fitted with a multi-purpose warhead (MPWH). Developed as "Spiral 2". Production started in May 2020.
+FGM-148G: To be developed from project "Spiral 3". Will develop a new launch tube assembly and battery unit, and will replace the current gas-cooled seeker with an uncooled seeker in the guidance section of the missile. Production missiles will be designated FGM-148G.
+The LWCLU does not yet have a variant designation.
+
+Operators
+Current operators
+Australia: 92 launchers.
+ Bahrain: 13 launchers.
+ Croatia:
+ Czech Republic: Purchased 3 launchers and 12 missiles for its special forces, for use in Afghanistan. An additional order totaling US$10.21 million was placed in December 2015 for 50 missiles and 3 launchers.
+ Estonia: 80 CLU, with option for additional 40, and 350 missiles purchased from the United States. In service from 2016.
+ France: 76 launchers and 260 missiles for use in Afghanistan. Was replacing MILAN anti-tank missile, no follow-on order in favor of the Missile Moyenne Portée (MMP).
+ Georgia: 72 CLUs and 410 missiles received in 2018, and the delivery of another 46 CLUs and 82 missiles approved in 2021. The first Foreign Military Sale to the Georgian military consisting of 410 missiles, and 72 CLUs, includes 2 Javelin Block 1 CLUs to be used as spares was approved for US$75 million. In 2021, 46 CLUs and 82 missiles were ordered, for US$30 million.
+ Indonesia: 25 launchers and 189 missiles of Javelin Block 1 variant, in a US$60 million deal.
+ Ireland: Irish Army, it replaced the MILAN anti-tank missile.
+ Jordan: 30 launchers and 116 missiles were received in 2004. 162 CLUs, 18 Fly-to-Buy Missiles, 1,808 Javelin Anti-Tank Guided Missiles and other support equipment was ordered in 2009. The estimated cost is $388 million. Jordan placed another order of $133.9 million in 2017.
+ Libya: Used by the Libyan National Army
+ Lithuania: Total: 144 CLU and 871 missiles purchased from the United States. In 2001, 40 launchers and 200 missiles. The first European country to receive this launcher and missile system in 2001. In December 2015 DSCA approved for a possible Foreign Military Sale to Lithuania for another 220 missiles and 74 CLUs for $55 million, plus 30 CLU and 350 missiles in 2026.
+ New Zealand: 24 launchers and 390 missiles, in batches of 120, then 270.
+ Norway: 100 launchers and 526 missiles. Delivered from 2006, in use from 2009. In 2017 Norwegian authorities started the process of finding a replacement anti-tank weapon, in order to counter new types of heavy tanks equipped with active protection systems capable of defeating missiles like the Javelin.
+ Oman: 30 launchers.
+ Poland: 110 launchers, 680 missiles.
+ Qatar: In March 2013, Qatar requested the sale of 500 Javelin missiles and 50 command launch units. The deal was signed in March 2014.
+ Saudi Arabia: 20 launchers and 150 missiles.
+ Taiwan: In 2002, Taiwan bought 360 missiles and 40 launcher units for $39 million. The contract included training devices, logistics support, associated equipment and training. In 2008, the United States issued a congressional notification for the sale of a further 20 launchers and 182 more missiles.
+ Turkey
+ Tunisia
+ Ukraine: Over 8,000 Javelin anti-armor systems.
+ United Arab Emirates
+ United Kingdom: The UK Ministry of Defence purchased 850 Javelin units and 9,000 missiles for the Light Forces Anti-Tank Guided Weapon System (LFATGWS) requirement. Javelin entered UK service in 2005, replacing the MILAN and Swingfire systems.
+ United States: Although not officially reported, budget records indicate that the US had 20,000 to 25,000 Javelin units on hand in 2021, prior to the Russian invasion of Ukraine.
+
+Future operators
+Albania: In May 2022, Lockheed Martin received orders from several international customers including Norway, Albania, Latvia and Thailand. The purchase was confirmed a few days later by the Ministry of Defence, Niko Peleshi for yet an undisclosed number and contract value of the system.
+ Brazil: 33 launchers and 222 missiles.
+ Bulgaria: Bulgaria is buying 218 FGM-148F Javelin missiles and 107 Javelin Lightweight Command Launch Units for its Stryker Dragoon vehicles for $114 million.
+ Kosovo: In January 2024, the State Department approved a purchase of 246 Javelin FGM-148F anti-tank missiles and 6 testing missiles and 24 Command Launch Units (CLU), worth $75 million.
+ Latvia: In May 2022, Lockheed Martin received orders from several international customers including Norway, Albania, Latvia and Thailand.
+ Morocco: In March 2024, the US State Department approved a potential $260 million sale of Javelin missiles and related equipment to Morocco. The deal includes 612 FGM-148F missiles and 200 Lightweight Command Launch Units (LWCLUs).
+ Romania: In December 2023, the US State Department approved a potential $80 million sale of Javelin missiles and related equipment to Romania. Romania requested to buy 263 Javelin FGM-148F missiles and 26 Javelin Light Weight Command Launch Units.
+ Thailand: In July 2021, the US State Department announced a possible Foreign Military Sale to Thailand, of 300 Javelin FGM-148 Missiles and 50 Javelin Command Launch Units (CLU), worth $83.5 million.
+
+Potential operators
+India: In 2010, India considered purchasing some systems off-the-shelf, with a larger number to be license manufactured locally through "transfer of technology" (ToT). The United States was reluctant to provide a full ToT. Eventually, the plan to purchase Javelins was "shelved". In October 2014, India chose to buy the Israeli Spike missile system. However, as of July 2025, India was again considering an emergency procurement of the Javelin ATGM. Negotiations for a larger deal for the ATGM is also underway. On 16 July, it was reported that India has sent a Letter of Request to the US for the co-production of the missile system in India. As of 22 October, the Indian Army is considering the fast track procurement of 12 launchers and 104 missiles.
+ Philippines: In a Manila Bulletin article published in August 25, 2025, the Philippine Army chief Lt. Gen. Antonio G. Nafarrete mentioned that the military is in the process of acquiring defense articles, and Javelin anti-tank missile systems is one of the articles mentioned.
+
+See also
+List of anti-tank missiles
+Escadrone, a Ukrainian manufacturing group which develops low-cost alternative for destroying armored vehicles
+Saint Javelin
+Comparable fire-and-forget systems
+
+Akeron MP, by MBDA France (France)
+AT-1K Raybolt, by Hanwha Vision and LIG Nex1 (South Korea)
+HJ-12, by Norinco (China)
+MPATGM, by DRDO (India)
+OMTAS  – (Turkey)
+Karaok (Turkey)
+Spike, by Rafael Defense (Israel)
+Type 01 LMAT, by Kawasaki Heavy Industries (Japan)
+Comparable beam riding systems
+
+Skif or Stuhna-P, by Luch Design Bureau (Ukraine), not fire-and-forget capable
+9M133 Kornet, by KBP Instrument Design Bureau (Russia). The Kornet EM version have fire-and-forget capable
+Comparable shorter range fire-and-forget systems
+
+Alcotán-100  – (Spain)
+NLAW  – (Sweden, United Kingdom)
+FGM-172 SRAW  – (United States)
+Related development
+
+AGM-176 Griffin, shared components by Raytheon
+Other
+
+Starstreak
+RPG-7
+
+References
+External links
+
+Javelin, Lockheed Martin (archived from the original on 2008-01-20)
+Designation Systems
+FAS article on Javelin
+Javelin tank killer

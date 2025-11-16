@@ -1,0 +1,34 @@
+Clofazimine, sold under the brand name Lamprene, is a medication used together with rifampicin and dapsone to treat leprosy. It is specifically used for multibacillary (MB) leprosy and erythema nodosum leprosum, and its discovery greatly improved the overall efficiency of the treatment. Evidence is insufficient to support its use in other conditions, though a retrospective study found it 95% effective in the treatment of Mycobacterium avium complex (MAC) when administered together with a macrolide and ethambutol, as well as the drugs amikacin and clarithromycin. However, in the United States, clofazimine is currently considered an orphan drug, is unavailable in pharmacies, and its use in the treatment of MAC is overseen by the Food and Drug Administration. It is taken orally.
+Common side effects include abdominal pain, diarrhea, itchiness, dry skin, and change in skin color. It can also cause swelling of the lining of the gastrointestinal tract, increased blood sugar, and sensitivity to the sun. It is unclear if use during pregnancy is safe. Clofazimine is a phenazine dye and is believed to work by interfering with DNA.
+Clofazimine was discovered in the 1950s at Trinity College, Dublin, and approved for medical use in the United States in 1986. It is on the World Health Organization's List of Essential Medicines. In the United States it is not available commercially but can be obtained from the US Department of Health and Human Services.
+
+Medical uses
+The primary use of clofazimine is for the treatment of leprosy. Other uses have not been proven to be safe or effective.
+It has been studied in combination with other antimycobacterial drugs to treat Mycobacterium avium infections in people with HIV/AIDS and Mycobacterium avium paratuberculosis. Clofazimine also has a marked anti-inflammatory effect and is given to control the leprosy reaction, erythema nodosum leprosum (ENL). (From AMA Drug Evaluations Annual, 1993, p1619). The drug is given as an alternative to people who can not tolerate the effects of dapsone for leprosy. 
+Early research suggested clofazimine inhibits the replication of SARS-CoV-2 in vitro and reduce viral load and inflammation in the lung in animal models
+
+Side effects
+Clofazimine produces pink to brownish skin pigmentation in 75-100% of patients within a few weeks, as well as similar discoloration of most bodily fluids and secretions. These discolorations are reversible but may take months to years to disappear. There is evidence in medical literature that as a result of clofazimine administration, several patients have developed depression which in some cases resulted in suicide. It has been hypothesized that the depression was a result of this chronic skin discoloration.
+Cases of ichthyosis and skin dryness are also reported in response to this drug (8%-28%), as well as rash and itchiness (1-5%).
+
+Mechanism
+Clofazimine works by binding to the guanine bases of bacterial DNA, thereby blocking the template function of the DNA and inhibiting bacterial proliferation. It also increases activity of bacterial phospholipase A2, leading to release and accumulation of lysophospholipids, which are toxic and inhibit bacterial proliferation.
+Clofazimine is also a FIASMA (functional inhibitor of acid sphingomyelinase).
+
+Metabolism
+Clofazimine has a biological half life of about 70 days. Autopsies performed on those who have died while on clofazimine show crystal-like aggregates in the intestinal mucosa, liver, spleen, and lymph nodes.
+
+History
+Clofazimine, initially known as B663, was first synthesised in 1954 by a team of scientists at Trinity College, Dublin: Frank Winder, J.G. Belton, Stanley McElhinney, M.L. Conalty, Seán O'Sullivan, and Dermot Twomey, led by Vincent Barry. Clofazimine was originally intended as an anti-tuberculosis drug but proved ineffective. In 1959, a researcher named Y. T. Chang identified its effectiveness against leprosy. After clinical trials in Nigeria and elsewhere during the 1960s, Swiss pharmaceutical company Novartis launched the product in 1969 under the brand name Lamprene.
+Novartis was granted FDA approval of clofazimine in December 1986 as an orphan drug. The drug is currently no longer commercially available in the United States as Novartis has discontinued production of clofazimine for the US market and no generic or other brand names are marketed in the US although it retains FDA approval.
+
+Society and culture
+Clofazimine is marketed under the trade name Lamprene by Novartis although its discontinued in some countries like the US. Other brands are also available in many countries. Another producer of the clofazimine molecule is Sangrose Laboratories, located in Mavelikara, India.
+
+Research
+The immunosuppressive effects of clofazimine were immediately noticed when applied in animal model. Macrophages were first reported to be inhibited due to the stabilization of lysosomal membrane by clofazimine. Clofazimine also showed a dosage-dependent inhibition of neutrophil motility, lymphocyte transformation, mitogen-induced PBMC proliferation and complement-mediated solubilization of pre-formed immune complexes in vitro. A mechanistic studying of clofazimine in human T cells revealed that this drug is a Kv1.3 (KCNA3) channel blocker. This indicates that clofazimine will be potentially used for treatment of multiple sclerosis, rheumatoid arthritis and type 1 diabetes. Because the Kv1.3-high effector memory T cells (TEM) are actively involved in the development of these diseases, and Kv1.3 activity is essential for stimulation and proliferation of TEM by regulating calcium influx in the T cells. 
+Several clinical trials were also conducted looking for its immunosuppressive activity even before it was approved for leprosy by FDA. It was first reported to be effective in treating chronic discoid lupus erythematosus with 17 out of 26 patients got remission. But later another group found it was ineffective in treating diffuse, photosensitive, systemic lupus erythematosus. Clofazimine also has been sporadically reported with some success in other autoimmune diseases such as psoriasis, Miescher's granulomatous cheilitis.
+
+References
+External links
+"Lamprene (clofazimine) capsules, for oral use Initial U.S. Approval: 1986". DailyMed. 31 January 2019. Retrieved 14 June 2020.

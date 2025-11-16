@@ -1,0 +1,77 @@
+Gestational hypertension or pregnancy-induced hypertension (PIH) is the development of new hypertension in a pregnant woman after 20 weeks of gestation without the presence of protein in the urine or other signs of pre-eclampsia. Gestational hypertension is defined as having a blood pressure 
+greater than 140/90 on two occasions at least 6 hours apart.
+
+Signs and symptoms
+No single diagnostic test currently exists to predict the likelihood of developing gestational hypertension. High blood pressure is the major sign in diagnosing gestational hypertension. Some women with gestational hypertension may present asymptomatic, but several symptoms are associated with the condition.
+Signs and symptoms of gestational hypertension include:
+
+Swelling
+Sudden weight gain
+Blurred vision or sensitivity to light
+Nausea and vomiting
+Persistent headaches
+Increased blood pressure
+
+Risk factors
+Maternal causes
+
+Obesity
+Mothers under 20 or over 40 years old
+Past history of diabetes mellitus, hypertension (particularly gestational hypertension) and renal disease
+Pre-existing hypertension
+Thrombophilias (anti-phospholipid syndrome, protein C/S deficiency, factor V Leiden)
+Having donated a kidney
+Pregnancy
+
+Multiple gestation pregnancies (twins or triplets, etc.)
+Placental abnormalities:
+Hyperplacentosis: Excessive exposure to chorionic villi
+Placental ischemia
+Family history
+
+Family history of pre-eclampsia
+
+Diagnosis
+Conditions
+There exist several hypertensive states of pregnancy:
+
+Gestational hypertension
+Gestational hypertension is usually defined as having a blood pressure higher than 140/90 measured on two separate occasions, more than 6 hours apart, without the presence of protein in the urine, and diagnosed after 20 weeks of gestation.
+Pre-eclampsia
+Pre-eclampsia is gestational hypertension plus proteinuria (>300 mg of protein in a 24-hour urine sample). Severe pre-eclampsia involves a blood pressure greater than 160/110, with additional medical signs and symptoms. HELLP syndrome is a type of pre-eclampsia. It is a combination of three medical conditions: hemolytic anemia, elevated liver enzymes, and low platelet count.
+Eclampsia
+This is when tonic-clonic seizures appear in a pregnant woman with high blood pressure and proteinuria.
+Pre-eclampsia and eclampsia are sometimes treated as components of a common syndrome.
+
+Treatment
+There is no specific treatment, but gestational hypertension is monitored closely to rapidly identify pre-eclampsia and its life-threatening complications (HELLP syndrome and eclampsia).
+Drug treatment options are limited, as many antihypertensives may negatively affect the fetus. ACE inhibitors, angiotensin receptor blockers, and direct renin inhibitors are contraindicated in pregnancy as they are teratogenic. Methyldopa, hydralazine, nifedipine, and labetalol are most commonly used for severe pregnancy hypertension.
+The fetus is at increased risk for a variety of life-threatening conditions, including pulmonary hypoplasia (immature lungs). If dangerous complications appear after the fetus has reached a point of viability, even though still immature, then an early delivery may be warranted to save the lives of both mother and baby. An appropriate plan for labor and delivery includes the selection of a hospital with provisions for advanced life support for newborn babies.
+Exercise during pregnancy can help prevent hypertension as it can improve not only the health of the mother but also the child. Exercise can regulate the energy needs required during pregnancy while also decreasing inflammation. Regular exercise can also lower the stress levels associated with pregnancy.
+There have been significant findings on how exercising can help reduce the effects of hypertension just after one bout of exercise. Exercising can help reduce hypertension as well as pre-eclampsia and eclampsia. There have been findings in recent studies suggesting that exercising according to recommended guidelines during pregnancy can reduce the risk of developing gestational hypertensive disorder by 30%. The Centers for Disease Control and Prevention recommends that during pregnancy, the pregnant woman should exercise 150 minutes each week, specifically focusing on aerobic activity at a moderate intensity.  
+The acute physiological responses include increased cardiac output (CO) of the individual (increased heart rate and stroke volume). This increase in CO can inadvertently maintain the amount of blood going into the muscles, improving the muscle's functionality later. Exercising can also improve systolic and diastolic blood pressure, making it easier for blood to pump to the body. Through regular bouts of physical activity, blood pressure can be reduced, thereby reducing the incidence of hypertension. A recent meta-analysis presented that exercise interventions in pregnant women could reduce systolic and diastolic blood pressure. The meta-analysis study found that exercise is more likely to reduce the risk of hypertensive disorder of pregnancy in women who are more prone to developing hypertensive disorders of pregnancy. Risk factors that influence the likelihood of developing hypertensive disorders of pregnancy include, a maternal age of 40 or more, pre-pregnancy obesity, excess weight gain during pregnancy and gestational diabetes. 
+Aerobic exercise has been shown to regulate blood pressure more effectively than resistance training. Compared to having a sedentary lifestyle, being physically active in aerobic exercise for 30-60 minutes 2-7 times a week significantly decreases the risk of gestational hypertension in pregnancy compared to a sedentary pregnant individual. It is recommended to see the effects of exercising; a person should aim for 5-7 days/ week of aerobic exercise. This exercise should be light to moderate intensity, up to ~85% of max heart rate (220-age). Aerobic exercise can decrease SBP by 5- 15 mmHg, versus resistance training, which decreases it by 3- 5 mmHg. Aerobic exercises such as jogging, rowing, dancing, or hiking can decrease SBP the most. The decrease in SBP can regulate the effect of hypertension, ensuring the baby will not be harmed. Resistance training takes a toll on the cardiovascular system in untrained individuals, leading to a reluctance to prescribe resistance training to reduce blood pressure.
+
+Evolutionary considerations
+Humans
+Gestational hypertension is one of the most common disorders seen in human pregnancies. Though relatively benign on its own, in roughly half of the cases of gestational hypertension the disorder progresses into pre-eclampsia, a dangerous condition that can prove fatal to expectant mothers.  However, gestational hypertension is a condition that is fairly rare to see in other animals.  For years, it has been the belief of the scientific community that gestational hypertension and pre-eclampsia were relatively unique to humans, although there has been some recent evidence that other primates can also develop similar conditions, albeit due to different underlying mechanisms. The underlying cause of gestational hypertension in humans is commonly believed to be an improperly implanted placenta.  Humans have evolved to have a very invasive placenta to facilitate better oxygen transfer from the mother to the fetus, and to support the growth of its large brain.
+
+Origins of the placenta
+The origins of gestational hypertension may lie with the development of humans' hemochorial placenta.  A hemochorial placenta optimizes the amount of oxygen and nutrients that can be absorbed into the fetal blood supply, while at the same time ensuring rapid diffusion of wastes away from the fetus.  This hemochorial placenta differs from lower primates' epitheliochorial placentae in the way that it allows the fetal tissues to interact directly with the mother's blood.  The hemochorial placenta thereby promotes more rapid diffusion to and from the fetal blood supply. 
+In animals with an epitheliochorial placenta, such as horses and pigs, the greatest resistance to maternal blood flow in the vascular system was found within the placenta.  However, in animals with hemochorial placental structures such as rodents and primates, the vascular resistance in the placenta was low, leading scientists to the conclusion that the greatest resistance to maternal blood flow is found elsewhere in the maternal vascular system.  The high vascular resistance outside of the placenta leads to higher maternal blood pressure throughout the body.
+The fetal cells that implant into the uterine wall are known as the trophoblast.  The hemochorial placenta bathes the fetal trophoblast in maternal blood by forming lacunae, or lakes, of the mother's blood that surround fetal tissue.  The lacunae are filled by the spiral arteries, which means that the mother's blood pressure is the driving force behind the introduction of new blood, which contains both oxygen and food for the fetus, to the system. It is thought that humans need the increased diffusion provided by the hemochorial placenta to grow the large brains compared to the body size that distinguishes them from other primates.
+
+Incorrect placental implantation
+It is thought that "failings" in normal hemochorial placental structure lead to pre-eclampsia and gestational hypertension.  The human placenta implants "earlier, deeper, and more extensively" into the uterine wall, which can potentially lead to many problems that are found in human pregnancies, but not as much in other animals.  Miscarriage and pre-eclampsia are both very rare in other species but are two of the most common pregnancy-related diseases in humans. The genetic roots of gestational hypertension and pre-eclampsia are certain, as women with a family history of the condition are three times more likely to develop it when they are pregnant.
+One of the potential causes of gestational hypertension and pre-eclampsia is when the trophoblast does not invade far enough into the uterine lining.  When the fetus's trophoblast does not fully extend into the uterine wall, the spiral arteries do not become fully converted into low-resistance channels.  It has been found that this incomplete conversion of spiral arteries increases the resistance to uterine blood flow during pregnancy and that this occurrence was associated with gestational hypertension.  One potential cause of this incomplete breach of the spiral arteries that leads to gestational hypertension is a mistaken immune response by the maternal tissue, reaction to the alien fetal tissue. Therefore, it is clear that the complication of gestational hypertension has roots in the early implantation of the fetus in the uterine wall, an implantation technique unique to humans.
+The highly invasive placenta found in humans is thought to be linked to humans' high circulating levels of the hormones CG and hCG. It has been shown that the higher the levels of these hormones, the deeper the trophoblast's invasion into the uterine wall.  Instances of gestational hypertension and pre-eclampsia have been shown to occur when the invasion of the uterine wall is not deep enough, because of lower CG and hCG levels in the mother.
+
+Evolutionary tradeoff
+Despite these risks for gestational hypertension, the hemochorial placenta has been favored because of its advantages in that it aids in diffusion from mother to fetus later in pregnancy.  The bipedal posture that has allowed humans to walk upright has also led to reduced cardiac output, and it has been suggested that this is what necessitated humans' aggressive early placental structures.  Increased maternal blood pressure can attempt to make up for lower cardiac output, ensuring that the fetus's growing brain receives enough oxygen and nutrients.  The benefits of being able to walk upright and run on land have outweighed the disadvantages that come from bipedalism, including the placental diseases of pregnancy, such as gestational hypertension.  Similarly, the advantages of having a large brain size have outweighed the deleterious effects of having a placenta that does not always convert the spiral arteries effectively, leaving humans vulnerable to contracting gestational hypertension.  It is speculated that this was not the case with Neanderthals and that they died out because their cranial capacity increased too much, and their placentae were not equipped to handle fetal brain development, leading to widespread pre-eclampsia and maternal and fetal death.
+Gestational hypertension in the early stages of pregnancy (trimester 1) has been shown to improve the health of the child both in its first year of life, and its later life.  However, when the disease develops later in the pregnancy (subsequent trimesters), or turns into pre-eclampsia, detrimental health effects for the fetus begin, including low birth-weight. It has been proposed that fetal genes designed to increase the mother's blood pressure are so beneficial that they outweigh the potential adverse effects that can come from pre-eclampsia. It has also been suggested that gestational hypertension and pre-eclampsia have remained active traits due to the cultural capacity of humans, and the tendency for midwives or helpers to aid in delivering babies.
+
+Relevance of evolutionary history
+It is the goal of evolutionary medicine to find treatments for diseases that are informed by the evolutionary history of a disease. It has been suggested that gestational hypertension is linked to insulin resistance during pregnancy.  Both the increase in blood sugar that can lead to gestational diabetes and the increase in blood pressure that can lead to gestational hypertension are mechanisms that aim to optimize the amount of nutrients that can be passed from maternal tissue to fetal tissue.  It has been suggested that techniques used to combat insulin insensitivity might also prove beneficial to those with gestational hypertension.  Measures to avoid insulin resistance include avoiding obesity before pregnancy, minimizing weight gain during pregnancy, eating foods with low glycemic indices, and exercising.
+
+
+== References ==
