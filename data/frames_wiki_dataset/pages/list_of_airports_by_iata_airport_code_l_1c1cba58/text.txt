@@ -1,0 +1,14 @@
+== L ==
+The DST column shows the months in which Daylight Saving Time, a.k.a. Summer Time, begins and ends. A blank DST box usually indicates that the location stays on Standard Time all year, although in some cases the location stays on Summer Time all year. If a location is currently on DST, add one hour to the time in the Time column.
+
+Notes
+^1  Clocks on Lord Howe Island are advanced only 30 minutes for Daylight Saving Time.
+^2  Airport is located in Saxony.
+^3  LON is common IATA code for Heathrow Airport (IATA: LHR), Gatwick Airport (IATA: LGW), Luton Airport (IATA: LTN), London Stansted Airport (IATA: STN), London City Airport (IATA: LCY), London Southend Airport (IATA: SEN) and London Biggin Hill Airport (IATA: BQH).
+
+References
+
+"United Nations Code for Trade and Transport Locations". UN/LOCODE 2011-2. UNECE. 28 February 2012. - includes IATA codes
+"ICAO Location Indicators by State" (PDF). International Civil Aviation Organization. 17 September 2010. Archived from the original (PDF) on 25 March 2019. Retrieved 27 August 2012.
+Aviation Safety Network - IATA and ICAO airport codes
+Great Circle Mapper - IATA, ICAO and FAA airport codes
