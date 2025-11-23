@@ -146,9 +146,6 @@ static/
 text_embeddings.pt
 training_log.json
 
-# Obsolete scripts
-build_faiss_index.py
-
 # Data - Assuming this should not be in the repo
 images/
 adaptive-alpha/analysis_results/
