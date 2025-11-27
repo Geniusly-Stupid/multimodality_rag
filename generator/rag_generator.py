@@ -43,18 +43,40 @@ class RAGGenerator:
         self.model.eval()
 
     def build_prompt(self, query: str, retrieved_chunks: List[Dict]) -> str:
-        """Format the prompt with evidence passages."""
+        """Format the prompt with evidence passages (text and/or images)."""
         evidence_lines = []
+        image_info = []
+        
         for idx, chunk in enumerate(retrieved_chunks, start=1):
-            text = chunk.get("text", "").strip()
-            evidence_lines.append(f"[{idx}] {text}")
+            modality = chunk.get("modality", "text")
+            
+            if modality == "text":
+                text = chunk.get("text", "").strip()
+                if text:
+                    evidence_lines.append(f"[{idx}] {text}")
+            elif modality == "image":
+                caption = chunk.get("caption", "").strip()
+                image_id = chunk.get("image_id", "")
+                if caption:
+                    image_info.append(f"[Image {idx}] ID: {image_id}, Caption: {caption}")
+        
         evidence_block = "\n".join(evidence_lines) if evidence_lines else "None provided."
-        return (
-            "You are a helpful assistant that answers questions using the supplied evidence.\n\n"
-            f"User question:\n{query}\n\n"
-            f"Relevant evidence:\n{evidence_block}\n\n"
-            "Answer:\n"
-        )
+        image_block = "\n".join(image_info) if image_info else ""
+        
+        prompt_parts = [
+            "You are a helpful assistant that answers questions using the supplied evidence.\n",
+            f"User question:\n{query}\n\n",
+        ]
+        
+        if evidence_block != "None provided.":
+            prompt_parts.append(f"Relevant text evidence:\n{evidence_block}\n\n")
+        
+        if image_block:
+            prompt_parts.append(f"Relevant images found:\n{image_block}\n\n")
+        
+        prompt_parts.append("Answer:\n")
+        
+        return "".join(prompt_parts)
 
     @torch.inference_mode()
     def generate(self, query: str, retrieved_chunks: List[Dict]) -> str:

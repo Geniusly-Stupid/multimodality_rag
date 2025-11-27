@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+import os
+
+# Fix OpenMP library conflict on macOS
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+
 import argparse
 import ast
 import json
