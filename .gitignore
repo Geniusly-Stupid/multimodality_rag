@@ -158,3 +158,16 @@ data/flickr8k.zip
 # Training artifacts
 adaptive-alpha/training_ids.json
 adaptive-alpha/training_metrics.png
+
+# Large model files and caches
+**/huggingface_cache/
+**/cache/
+D:/
+*.faiss
+retriever/faiss_index/*.faiss
+retriever/faiss_index/*.npy
+retriever/faiss_index/chunks.jsonl
+retriever/faiss_index/images/*.faiss
+retriever/faiss_index/images/*.npy
+retriever/faiss_index/images/*.jsonl
+evaluation_results/*.jsonl
