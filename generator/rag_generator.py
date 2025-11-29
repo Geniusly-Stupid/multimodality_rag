@@ -10,7 +10,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
 DEFAULT_GENERATOR_MODEL = "Qwen/Qwen2.5-1.5B-Instruct"
-DEFAULT_CACHE_DIR = Path("D:/huggingface_cache")
+DEFAULT_CACHE_DIR = None 
 
 
 @dataclass
@@ -43,39 +43,48 @@ class RAGGenerator:
         self.model.eval()
 
     def build_prompt(self, query: str, retrieved_chunks: List[Dict]) -> str:
-        """Format the prompt with evidence passages (text and/or images)."""
-        evidence_lines = []
+        """Format the prompt with evidence passages (text, captions, images)."""
+        text_evidence = []
+        caption_evidence = []
         image_info = []
-        
+
         for idx, chunk in enumerate(retrieved_chunks, start=1):
             modality = chunk.get("modality", "text")
-            
-            if modality == "text":
-                text = chunk.get("text", "").strip()
-                if text:
-                    evidence_lines.append(f"[{idx}] {text}")
+            if modality == "caption":
+                caption = (chunk.get("caption") or chunk.get("text") or "").strip()
+                if caption:
+                    caption_evidence.append(f"[{idx}] {caption}")
             elif modality == "image":
-                caption = chunk.get("caption", "").strip()
+                caption = (chunk.get("caption") or chunk.get("text") or "").strip()
                 image_id = chunk.get("image_id", "")
                 if caption:
-                    image_info.append(f"[Image {idx}] ID: {image_id}, Caption: {caption}")
-        
-        evidence_block = "\n".join(evidence_lines) if evidence_lines else "None provided."
-        image_block = "\n".join(image_info) if image_info else ""
-        
+                    caption_evidence.append(f"[{idx}] (Image {image_id}) {caption}")
+                else:
+                    image_info.append(f"[Image {idx}] ID: {image_id}")
+            else:
+                text = (chunk.get("text") or "").strip()
+                if text:
+                    text_evidence.append(f"[{idx}] {text}")
+
         prompt_parts = [
             "You are a helpful assistant that answers questions using the supplied evidence.\n",
             f"User question:\n{query}\n\n",
         ]
-        
-        if evidence_block != "None provided.":
-            prompt_parts.append(f"Relevant text evidence:\n{evidence_block}\n\n")
-        
-        if image_block:
-            prompt_parts.append(f"Relevant images found:\n{image_block}\n\n")
-        
+
+        if text_evidence:
+            prompt_parts.append("Wiki Text Evidence:\n")
+            prompt_parts.append("\n".join(text_evidence) + "\n\n")
+
+        if caption_evidence:
+            prompt_parts.append("Image Caption Evidence:\n")
+            prompt_parts.append("\n".join(caption_evidence) + "\n\n")
+
+        if image_info:
+            prompt_parts.append("Additional Image Metadata:\n")
+            prompt_parts.append("\n".join(image_info) + "\n\n")
+
         prompt_parts.append("Answer:\n")
-        
+
         return "".join(prompt_parts)
 
     @torch.inference_mode()

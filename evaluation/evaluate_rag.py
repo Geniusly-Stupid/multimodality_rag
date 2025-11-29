@@ -24,6 +24,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from generator.rag_generator import GeneratorConfig, RAGGenerator
 from rag_pipeline import RAGPipeline
+from retriever.multimodal_retriever import MultimodalRetriever, MultimodalRetrieverConfig
 from retriever.rag_retriever import EncoderConfig, RAGRetriever
 
 OUTPUT_DIR = Path("evaluation_results")
@@ -133,17 +134,41 @@ def average_generation_length(predictions: Sequence[str]) -> float:
     return sum(lengths) / len(lengths) if lengths else 0.0
 
 
-def evaluate(top_k: int, limit: int | None) -> Dict:
+def mode_prefix(mode: str) -> str:
+    mapping = {
+        "text": "frames_text_only",
+        "text_clip": "frames_text_clip",
+        "text_caption": "frames_text_caption",
+        "caption_only": "frames_caption_only",
+    }
+    return mapping.get(mode, f"frames_{mode}")
+
+
+def build_retriever(retrieval_mode: str):
+    if retrieval_mode == "text":
+        return RAGRetriever(encoder_config=EncoderConfig())
+    config = MultimodalRetrieverConfig(
+        use_text_retrieval=retrieval_mode in {"text", "text_clip", "text_caption"},
+        use_image_retrieval=retrieval_mode == "text_clip",
+        use_caption_retrieval=retrieval_mode in {"text_caption", "caption_only"},
+        default_retrieval_mode=retrieval_mode,
+        use_reranker=True,
+    )
+    return MultimodalRetriever(config=config)
+
+
+def evaluate(top_k: int, limit: int | None, retrieval_mode: str) -> Dict:
     dataset = load_dataset("google/frames-benchmark")["test"]
     total = len(dataset) if limit is None else min(limit, len(dataset))
-    print(f"Evaluating {total} samples (top_k={top_k})...")
+    print(f"Evaluating {total} samples (top_k={top_k}, mode={retrieval_mode})...")
 
-    retriever = RAGRetriever(encoder_config=EncoderConfig())
+    retriever = build_retriever(retrieval_mode)
     generator = RAGGenerator(GeneratorConfig())
     pipeline = RAGPipeline(retriever, generator)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    results_path = OUTPUT_DIR / "frames_rag_results.jsonl"
+    prefix = mode_prefix(retrieval_mode)
+    results_path = OUTPUT_DIR / f"{prefix}.jsonl"
     results_file = results_path.open("w", encoding="utf-8")
 
     agg = {
@@ -162,7 +187,7 @@ def evaluate(top_k: int, limit: int | None) -> Dict:
         answer = example.get("answer") or example.get("Answer") or ""
         gold_links = parse_links(example.get("wiki_links"))
 
-        output = pipeline.answer(prompt, top_k=top_k)
+        output = pipeline.answer(prompt, top_k=top_k, retrieval_mode=retrieval_mode)
         labels = relevance_labels(output.retrieved_chunks, gold_links, top_k)
 
         em = exact_match(output.generated_answer, answer)
@@ -202,8 +227,10 @@ def evaluate(top_k: int, limit: int | None) -> Dict:
         "retrieval_recall@k": agg["retrieval_recall"] / num,
         "avg_generation_length": average_generation_length(preds),
         "top_k": top_k,
+        "retrieval_mode": retrieval_mode,
     }
-    (OUTPUT_DIR / "frames_rag_metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    metrics_path = OUTPUT_DIR / f"{prefix}_metrics.json"
+    metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     print("\nEvaluation complete:")
     print(json.dumps(metrics, indent=2))
     print(f"Results written to {results_path}")
@@ -214,12 +241,19 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Evaluate RAG on google/frames-benchmark.")
     parser.add_argument("--top_k", type=int, default=5)
     parser.add_argument("--limit", type=int, default=None, help="Optional limit on number of samples.")
+    parser.add_argument(
+        "--retrieval_mode",
+        type=str,
+        default="text",
+        choices=["text", "text_clip", "text_caption", "caption_only"],
+        help="Retrieval strategy (text-only, text+CLIP, text+caption, caption-only).",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    evaluate(args.top_k, args.limit)
+    evaluate(args.top_k, args.limit, args.retrieval_mode)
 
 
 if __name__ == "__main__":

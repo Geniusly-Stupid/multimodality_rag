@@ -1,7 +1,8 @@
-"""Build a FAISS retrieval index from Frames Wikipedia pages."""
+"""Build FAISS retrieval indexes for Frames Wikipedia pages and captions."""
 
 from __future__ import annotations
 
+import argparse
 import os
 
 # Fix OpenMP library conflict on macOS
@@ -31,6 +32,11 @@ if not FRAMES_DATASET_DIR.exists():
     FRAMES_DATASET_DIR = ROOT_DIR / "frames_wiki_dataset"
 PAGES_DIR = FRAMES_DATASET_DIR / "pages"
 OUTPUT_DIR = BASE_DIR / "faiss_index"
+CAPTIONS_PATH = FRAMES_DATASET_DIR / "image_captions.jsonl"
+CAPTION_INDEX_FILENAME = "frames_captions.index"
+CAPTION_CHUNKS_FILENAME = "frames_captions.jsonl"
+CAPTION_EMBEDDINGS_FILENAME = "frames_captions_embeddings.npy"
+CAPTION_METADATA_FILENAME = "frames_captions_meta.json"
 
 CHUNK_MIN_WORDS = 200
 CHUNK_MAX_WORDS = 350
@@ -183,6 +189,47 @@ def build_chunks(pages: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return records
 
 
+def load_captions(path: Path) -> List[Dict[str, Any]]:
+    """Load generated image captions from JSONL."""
+    captions: List[Dict[str, Any]] = []
+    if not path.exists():
+        raise SystemExit(f"Missing captions file: {path}. Run tools/build_frames_image_captions.py first.")
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                captions.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    if not captions:
+        raise SystemExit("Caption file is empty; nothing to index.")
+    return captions
+
+
+def build_caption_records(captions: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Normalize caption records into the same shape as text chunks."""
+    records: List[Dict[str, Any]] = []
+    for idx, cap in enumerate(captions):
+        caption_text = cap.get("caption") or cap.get("text") or ""
+        record = {
+            "id": idx,
+            "caption": caption_text,
+            "text": caption_text,  # keeps compatibility with text retriever code
+            "page_id": cap.get("page_id"),
+            "image_id": cap.get("image_id"),
+            "image_url": cap.get("image_url"),
+            "page_url": cap.get("page_url"),
+            "source_url": cap.get("page_url") or cap.get("source_url"),
+            "caption_type": cap.get("caption_type"),
+            "caption_model": cap.get("caption_model"),
+        }
+        records.append(record)
+    print(f"Loaded {len(records)} caption records for indexing.")
+    return records
+
+
 def build_faiss_index(
     embeddings: np.ndarray,
     index_type: str = FAISS_INDEX_TYPE,
@@ -219,13 +266,23 @@ def save_chunks(path: Path, chunks: Sequence[Dict[str, Any]]) -> None:
             f.write(json.dumps(chunk, ensure_ascii=False) + "\n")
 
 
-def write_metadata(path: Path, *, num_chunks: int, embedding_dim: int, encoder_name: str, faiss_index_type: str) -> None:
+def write_metadata(
+    path: Path,
+    *,
+    num_chunks: int,
+    embedding_dim: int,
+    encoder_name: str,
+    faiss_index_type: str,
+    extra: Optional[Dict[str, Any]] = None,
+) -> None:
     payload = {
         "num_chunks": num_chunks,
         "embedding_dim": embedding_dim,
         "encoder_name": encoder_name,
         "faiss_index_type": faiss_index_type,
     }
+    if extra:
+        payload.update(extra)
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
@@ -245,10 +302,17 @@ def search_demo(query: str, encoder: TextEncoder, index: faiss.Index, chunks: Se
         record = chunks[chunk_index]
         score = float(distances[0][rank])
         preview = record["text"][:160].replace("\n", " ") + "..."
-        print(f"  #{rank + 1} | score={score:.4f} | page={record['page_id']} | preview={preview}")
+        print(f"  #{rank + 1} | score={score:.4f} | page={record.get('page_id')} | preview={preview}")
 
 
-def main() -> None:
+def build_text_index(
+    encoder: TextEncoder,
+    output_dir: Path,
+    index_type: str,
+    metric: str,
+    nlist: int,
+    run_demo_query: Optional[str],
+) -> None:
     start_time = time.time()
     pages = load_pages(PAGES_DIR, MIN_PAGE_WORDS)
     chunks = build_chunks(pages)
@@ -256,38 +320,119 @@ def main() -> None:
         raise SystemExit("No chunks generated. Check chunking parameters.")
 
     chunk_texts = [record["text"] for record in chunks]
-
-    encoder_config = EncoderConfig()
-    encoder = TextEncoder(encoder_config)
-    print(f"Encoding {len(chunk_texts)} chunks with {encoder_config.model_name}...")
+    print(f"Encoding {len(chunk_texts)} chunks with {encoder.config.model_name}...")
     encode_start = time.time()
     embeddings = encoder.encode(chunk_texts, batch_size=ENCODING_BATCH_SIZE)
     encode_time = time.time() - encode_start
-    print(f"Encoded {embeddings.shape[0]} chunks in {encode_time:.2f}s. Dim={embeddings.shape[1]}")
+    print(f"Encoded {embeddings.shape[0]} chunks in {encode_time:.2f}s. Dim- {embeddings.shape[1]}")
 
-    index = build_faiss_index(embeddings, index_type=FAISS_INDEX_TYPE, metric=FAISS_METRIC, nlist=FAISS_NLIST)
+    index = build_faiss_index(embeddings, index_type=index_type, metric=metric, nlist=nlist)
     print(f"FAISS index built ({index.__class__.__name__}) with {index.ntotal} vectors.")
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    np.save(OUTPUT_DIR / "embeddings.npy", embeddings)
-    faiss.write_index(index, str(OUTPUT_DIR / "index.faiss"))
-    save_chunks(OUTPUT_DIR / "chunks.jsonl", chunks)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    np.save(output_dir / "embeddings.npy", embeddings)
+    faiss.write_index(index, str(output_dir / "index.faiss"))
+    save_chunks(output_dir / "chunks.jsonl", chunks)
     write_metadata(
-        OUTPUT_DIR / "metadata.json",
+        output_dir / "metadata.json",
         num_chunks=len(chunks),
         embedding_dim=embeddings.shape[1],
-        encoder_name=encoder_config.model_name,
+        encoder_name=encoder.config.model_name,
         faiss_index_type=index.__class__.__name__,
+        extra={"mode": "text"},
+    )
+
+    elapsed = time.time() - start_time
+    print(f"[text] Saved FAISS resources to {output_dir.resolve()} (pages={len(pages)}, chunks={len(chunks)}, elapsed={elapsed:.2f}s).")
+
+    if run_demo_query:
+        search_demo(run_demo_query, encoder, index, chunks)
+
+
+def build_caption_index(
+    encoder: TextEncoder,
+    captions_path: Path,
+    output_dir: Path,
+    index_type: str,
+    metric: str,
+    nlist: int,
+    run_demo_query: Optional[str],
+) -> None:
+    start_time = time.time()
+    captions = load_captions(captions_path)
+    caption_records = build_caption_records(captions)
+    texts = [rec["text"] for rec in caption_records]
+
+    print(f"Encoding {len(texts)} captions with {encoder.config.model_name}...")
+    encode_start = time.time()
+    embeddings = encoder.encode(texts, batch_size=ENCODING_BATCH_SIZE)
+    encode_time = time.time() - encode_start
+    print(f"Encoded {embeddings.shape[0]} captions in {encode_time:.2f}s. Dim- {embeddings.shape[1]}")
+
+    index = build_faiss_index(embeddings, index_type=index_type, metric=metric, nlist=nlist)
+    print(f"FAISS caption index built ({index.__class__.__name__}) with {index.ntotal} vectors.")
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    np.save(output_dir / CAPTION_EMBEDDINGS_FILENAME, embeddings)
+    faiss.write_index(index, str(output_dir / CAPTION_INDEX_FILENAME))
+    save_chunks(output_dir / CAPTION_CHUNKS_FILENAME, caption_records)
+    write_metadata(
+        output_dir / CAPTION_METADATA_FILENAME,
+        num_chunks=len(caption_records),
+        embedding_dim=embeddings.shape[1],
+        encoder_name=encoder.config.model_name,
+        faiss_index_type=index.__class__.__name__,
+        extra={"mode": "caption", "captions_source": str(captions_path)},
     )
 
     elapsed = time.time() - start_time
     print(
-        f"Saved FAISS resources to {OUTPUT_DIR.resolve()} "
-        f"(pages={len(pages)}, chunks={len(chunks)}, elapsed={elapsed:.2f}s)."
+        f"[caption] Saved FAISS resources to {output_dir.resolve()} "
+        f"(captions={len(caption_records)}, elapsed={elapsed:.2f}s)."
     )
 
-    if RUN_DEMO_QUERY:
-        search_demo(RUN_DEMO_QUERY, encoder, index, chunks)
+    if run_demo_query:
+        search_demo(run_demo_query, encoder, index, caption_records)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Build FAISS indices for Frames wiki text and/or captions.")
+    parser.add_argument("--mode", choices=["text", "caption", "both"], default="text", help="Which index to build.")
+    parser.add_argument("--captions_path", type=str, default=str(CAPTIONS_PATH), help="Path to generated captions JSONL.")
+    parser.add_argument("--output_dir", type=str, default=str(OUTPUT_DIR), help="Directory for saving FAISS assets.")
+    parser.add_argument("--index_type", choices=["flat", "ivf"], default=FAISS_INDEX_TYPE, help="FAISS index type.")
+    parser.add_argument("--metric", choices=["ip", "l2"], default=FAISS_METRIC, help="Similarity metric.")
+    parser.add_argument("--nlist", type=int, default=FAISS_NLIST, help="Number of IVF clusters (when using IVF).")
+    parser.add_argument("--demo_query", type=str, default=RUN_DEMO_QUERY, help="Optional demo query for quick sanity check.")
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    encoder_config = EncoderConfig()
+    encoder = TextEncoder(encoder_config)
+    output_dir = Path(args.output_dir)
+    captions_path = Path(args.captions_path)
+
+    if args.mode in {"text", "both"}:
+        build_text_index(
+            encoder,
+            output_dir=output_dir,
+            index_type=args.index_type,
+            metric=args.metric,
+            nlist=args.nlist,
+            run_demo_query=args.demo_query,
+        )
+    if args.mode in {"caption", "both"}:
+        build_caption_index(
+            encoder,
+            captions_path=captions_path,
+            output_dir=output_dir,
+            index_type=args.index_type,
+            metric=args.metric,
+            nlist=args.nlist,
+            run_demo_query=args.demo_query,
+        )
 
 
 if __name__ == "__main__":

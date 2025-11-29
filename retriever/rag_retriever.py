@@ -119,12 +119,18 @@ class RAGRetriever:
     def __init__(
         self,
         encoder_config: Optional[EncoderConfig] = None,
+        encoder: Optional[TextEncoder] = None,
         index_dirs: Sequence[Path] = DEFAULT_INDEX_DIRS,
         index_filename: str = DEFAULT_INDEX_PATH,
         chunks_filename: str = DEFAULT_CHUNKS_PATH,
         metadata_filename: str = DEFAULT_METADATA_PATH,
+        result_type: str = "text",
+        text_field: str = "text",
     ):
-        self.encoder = TextEncoder(encoder_config or EncoderConfig())
+        self.encoder = encoder or TextEncoder(encoder_config or EncoderConfig())
+        self.encoder_config = encoder_config or self.encoder.config
+        self.result_type = result_type
+        self.text_field = text_field
         self.index_path = _resolve_path(index_filename, index_dirs)
         self.chunks_path = _resolve_path(chunks_filename, index_dirs)
         self.metadata_path = _resolve_path(metadata_filename, index_dirs)
@@ -144,7 +150,7 @@ class RAGRetriever:
                 f"Index dimension {self.index.d} does not match encoder dimension {self.encoder.embedding_dim}"
             )
 
-    def retrieve(self, query: str, top_k: int = 5) -> List[Dict]:
+    def retrieve(self, query: str, top_k: int = 5, retrieval_mode: Optional[str] = None) -> List[Dict]:
         """Return scored chunks for a query."""
         if not query:
             return []
@@ -156,12 +162,19 @@ class RAGRetriever:
             if idx < 0 or idx >= len(self.chunks):
                 continue
             chunk = self.chunks[idx]
+            text_value = chunk.get(self.text_field) or chunk.get("text") or ""
             results.append(
                 {
-                    "text": chunk["text"],
+                    "text": text_value,
+                    "caption": chunk.get("caption", text_value),
                     "page_id": chunk.get("page_id"),
-                    "source_url": chunk.get("source_url"),
+                    "source_url": chunk.get("source_url") or chunk.get("page_url"),
+                    "image_id": chunk.get("image_id"),
+                    "image_url": chunk.get("image_url"),
+                    "caption_type": chunk.get("caption_type"),
+                    "caption_model": chunk.get("caption_model"),
                     "score": float(distances[0][rank]),
+                    "modality": self.result_type or chunk.get("modality", "text"),
                 }
             )
         return results

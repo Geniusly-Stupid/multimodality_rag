@@ -82,6 +82,9 @@ project_root/
     scifact/                  # SciFact corpus (if stored locally)
     flickr30k/                # Flickr30K captions/images
   rag_pipeline.py             # High-level RAG pipeline CLI interface
+  tools/
+    build_frames_wiki_dataset.py     # Crawl Wikipedia pages for Frames
+    build_frames_image_captions.py   # Generate image captions (BLIP/BLIP-2) for Frames
 ```
 
 
@@ -102,35 +105,74 @@ You have two options:
    python tools/build_frames_wiki_dataset.py
    ```
 
-### 1. Build the Frames FAISS index
+### 1. (Optional) Generate image captions for Frames
+
+Uses BLIP/BLIP-2 to turn each image URL into text; required for caption retrieval modes.
 
 ```bash
-python retriever/build_faiss_index.py
+# Ensure images.txt contains direct image URLs (upload.wikimedia.org/...jpg/png)
+python tools/build_frames_image_captions.py \
+  --model_type blip \
+  --model_name Salesforce/blip-image-captioning-large \
+  --caption_type default
 ```
 
-### 2. Evaluate SciFact retrieval
+### 2. Build FAISS indices
+
+```bash
+# Text-only chunks
+python retriever/build_faiss_index.py --mode text
+
+# Caption-only (needs image_captions.jsonl)
+python retriever/build_faiss_index.py --mode caption
+
+# Build both in one run
+python retriever/build_faiss_index.py --mode both
+```
+
+If you want CLIP image retrieval, also build the image index:
+
+```bash
+python retriever/build_image_index.py
+```
+
+### 3. Evaluate SciFact retrieval
 
 ```bash
 python evaluation/evaluate_scifact.py --top_k 5
 ```
 
-### 3. Evaluate Google Frames RAG
+### 4. Evaluate Google Frames RAG (choose retrieval mode)
 
 ```bash
-python evaluation/evaluate_rag.py --top_k 5
+# text + caption (recommended for caption baseline)
+python evaluation/evaluate_rag.py --retrieval_mode text_caption --top_k 5
+
+# other modes: text | text_clip | caption_only
+python evaluation/evaluate_rag.py --retrieval_mode caption_only --top_k 5 --limit 20
 ```
 
-### 4. Run interactive RAG queries
+### 5. Run interactive RAG queries
 
 ```bash
-python rag_pipeline.py --query "Who is Jane Ballou?" --top_k 5
+python rag_pipeline.py \
+  --query "Who is Jane Ballou?" \
+  --retrieval_mode text_caption \
+  --top_k 5 \
+  --use_reranker
 ```
+Supported retrieval modes:
+- `text`: text chunks only
+- `text_clip`: text chunks + CLIP image retrieval
+- `text_caption`: text chunks + caption retrieval
+- `caption_only`: captions only
 
 
 ## Notes
 
 * Default text encoder: `BAAI/bge-base-en-v1.5`
 * Default generator: `Qwen/Qwen2.5-1.5B-Instruct` (can be changed)
+* Reranker (optional): `BAAI/bge-reranker-v2-m3`
 * All generated indices and evaluation outputs are saved to:
 
   * `retriever/faiss_index/`
