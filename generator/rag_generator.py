@@ -43,28 +43,21 @@ class RAGGenerator:
         self.model.eval()
 
     def build_prompt(self, query: str, retrieved_chunks: List[Dict]) -> str:
-        """Format the prompt with evidence passages (text, captions, images)."""
+        """Format the prompt with evidence from normalized RAGAnything chunks."""
         text_evidence = []
         caption_evidence = []
-        image_info = []
 
         for idx, chunk in enumerate(retrieved_chunks, start=1):
-            modality = chunk.get("modality", "text")
-            if modality == "caption":
-                caption = (chunk.get("caption") or chunk.get("text") or "").strip()
-                if caption:
-                    caption_evidence.append(f"[{idx}] {caption}")
-            elif modality == "image":
-                caption = (chunk.get("caption") or chunk.get("text") or "").strip()
-                image_id = chunk.get("image_id", "")
-                if caption:
-                    caption_evidence.append(f"[{idx}] (Image {image_id}) {caption}")
-                else:
-                    image_info.append(f"[Image {idx}] ID: {image_id}")
+            meta = chunk.get("metadata") or {}
+            modality = chunk.get("modality") or meta.get("modality") or "text"
+            text_val = (chunk.get("text") or meta.get("text") or meta.get("caption") or "").strip()
+            caption_val = (chunk.get("caption") or meta.get("caption") or "").strip()
+
+            if modality == "caption" or caption_val:
+                caption_evidence.append(f"[{idx}] {caption_val or text_val}")
             else:
-                text = (chunk.get("text") or "").strip()
-                if text:
-                    text_evidence.append(f"[{idx}] {text}")
+                if text_val:
+                    text_evidence.append(f"[{idx}] {text_val}")
 
         prompt_parts = [
             "You are a helpful assistant that answers questions using the supplied evidence.\n",
@@ -72,16 +65,12 @@ class RAGGenerator:
         ]
 
         if text_evidence:
-            prompt_parts.append("Wiki Text Evidence:\n")
+            prompt_parts.append("Text Evidence:\n")
             prompt_parts.append("\n".join(text_evidence) + "\n\n")
 
         if caption_evidence:
-            prompt_parts.append("Image Caption Evidence:\n")
+            prompt_parts.append("Caption Evidence:\n")
             prompt_parts.append("\n".join(caption_evidence) + "\n\n")
-
-        if image_info:
-            prompt_parts.append("Additional Image Metadata:\n")
-            prompt_parts.append("\n".join(image_info) + "\n\n")
 
         prompt_parts.append("Answer:\n")
 

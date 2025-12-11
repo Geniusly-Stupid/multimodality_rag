@@ -1,5 +1,0 @@
-#
-# Ignore all files within this rag_results directory
-*
-
-!.gitignore

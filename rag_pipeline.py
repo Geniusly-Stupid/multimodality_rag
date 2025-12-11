@@ -8,12 +8,14 @@ import os
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 
 import argparse
+import asyncio
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 from generator.rag_generator import GeneratorConfig, RAGGenerator
-from retriever.multimodal_retriever import MultimodalRetriever, MultimodalRetrieverConfig
-from retriever.rag_retriever import EncoderConfig, RAGRetriever
+from parser.raganything_parser import RAGAnythingParser
+from retriever.retriever_adapter import FaissVectorStore, RetrieverAdapter
+from retriever.rag_retriever import EncoderConfig, TextEncoder
 
 
 @dataclass
@@ -26,7 +28,7 @@ class RAGOutput:
 class RAGPipeline:
     """Compose retriever and generator into a single interface."""
 
-    def __init__(self, retriever: RAGRetriever | MultimodalRetriever, generator: RAGGenerator):
+    def __init__(self, retriever, generator: RAGGenerator):
         self.retriever = retriever
         self.generator = generator
 
@@ -45,30 +47,16 @@ def format_output(rag_output: RAGOutput) -> str:
         lines.append("  (none)")
     else:
         for idx, chunk in enumerate(rag_output.retrieved_chunks, start=1):
-            modality = chunk.get("modality", "text")
+            meta = chunk.get("metadata") or {}
+            modality = chunk.get("modality") or meta.get("modality") or "text"
             score = chunk.get("score", 0.0)
-            
-            if modality == "text":
-                preview = chunk.get("text", "")[:200].replace("\n", " ")
-                lines.append(
-                    f"  [{idx}] [TEXT] score={score:.4f} page_id={chunk.get('page_id')} url={chunk.get('source_url')}"
-                )
-                lines.append(f"      {preview}...")
-            elif modality == "caption":
-                caption = chunk.get("caption", "")
-                image_id = chunk.get("image_id", "")
-                page_id = chunk.get("page_id", "")
-                lines.append(
-                    f"  [{idx}] [CAPTION] score={score:.4f} image_id={image_id} page_id={page_id} url={chunk.get('source_url')}"
-                )
-                lines.append(f"      {caption}")
-            elif modality == "image":
-                caption = chunk.get("caption", "")
-                image_id = chunk.get("image_id", "")
-                lines.append(
-                    f"  [{idx}] [IMAGE] score={score:.4f} image_id={image_id}"
-                )
-                lines.append(f"      Caption: {caption}")
+
+            text_val = (chunk.get("text") or meta.get("text") or meta.get("caption") or "")[:200].replace("\n", " ")
+            caption_val = (chunk.get("caption") or meta.get("caption") or "")[:200].replace("\n", " ")
+            display_text = caption_val or text_val
+            lines.append(f"  [{idx}] [{modality.upper()}] score={score:.4f}")
+            if display_text:
+                lines.append(f"      {display_text}...")
     lines.append("")
     lines.append("Answer:")
     lines.append(rag_output.generated_answer or "(empty)")
@@ -80,11 +68,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--query", type=str, required=True, help="User question to answer.")
     parser.add_argument("--top_k", type=int, default=5, help="Number of chunks to retrieve.")
     parser.add_argument(
-        "--retrieval_mode",
+        "--doc_path",
         type=str,
-        default="text_clip",
-        choices=["text", "text_clip", "text_caption", "caption_only"],
-        help="Retrieval strategy to use.",
+        required=True,
+        help="Path to the document to parse and index with RAGAnything.",
     )
     parser.add_argument(
         "--generator_model",
@@ -99,39 +86,33 @@ def parse_args() -> argparse.Namespace:
         default="D:/huggingface_cache",
         help="Directory for caching models/tokenizers.",
     )
-    parser.add_argument(
-        "--use_reranker",
-        action="store_true",
-        help="Enable cross-encoder reranking (bge-reranker-v2-m3).",
-    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    
-    # Use multimodal retriever (supports both text and images)
-    multimodal_config = MultimodalRetrieverConfig(
-        use_text_retrieval=args.retrieval_mode in {"text", "text_clip", "text_caption"},
-        use_image_retrieval=args.retrieval_mode == "text_clip",
-        use_caption_retrieval=args.retrieval_mode in {"text_caption", "caption_only"},
-        default_retrieval_mode=args.retrieval_mode,
-        text_weight=0.6,  # Slightly favor text
-        image_weight=0.4,
-        caption_weight=0.5,
-        use_reranker=args.use_reranker,
-    )
-    retriever = MultimodalRetriever(config=multimodal_config)
-    
-    gen_config = GeneratorConfig(
-        model_name=args.generator_model or GeneratorConfig().model_name,
-        max_new_tokens=args.max_new_tokens,
-        cache_dir=args.cache_dir,
-    )
-    generator = RAGGenerator(gen_config)
-    pipeline = RAGPipeline(retriever, generator)
-    output = pipeline.answer(args.query, top_k=args.top_k, retrieval_mode=args.retrieval_mode)
-    print(format_output(output))
+
+    async def _run() -> None:
+        # Parse and index document via RAGAnything (caption/text only)
+        parser = RAGAnythingParser()
+        chunks = await parser.parse_and_enrich(args.doc_path)
+
+        text_encoder = TextEncoder(EncoderConfig())
+        vector_store = FaissVectorStore(metric="ip")
+        retriever = RetrieverAdapter(text_encoder=text_encoder, vector_store=vector_store)
+        retriever.build_index(chunks)
+
+        gen_config = GeneratorConfig(
+            model_name=args.generator_model or GeneratorConfig().model_name,
+            max_new_tokens=args.max_new_tokens,
+            cache_dir=args.cache_dir,
+        )
+        generator = RAGGenerator(gen_config)
+        pipeline = RAGPipeline(retriever, generator)
+        output = pipeline.answer(args.query, top_k=args.top_k)
+        print(format_output(output))
+
+    asyncio.run(_run())
 
 
 if __name__ == "__main__":

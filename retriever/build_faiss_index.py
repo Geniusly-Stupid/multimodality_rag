@@ -1,19 +1,13 @@
-"""Build FAISS retrieval indexes for Frames Wikipedia pages and captions."""
+"""Build a FAISS index from RAGAnything-parsed chunks (text/caption only)."""
 
 from __future__ import annotations
 
 import argparse
-import os
-
-# Fix OpenMP library conflict on macOS
-os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
-
+import asyncio
 import json
-import math
-import time
-from dataclasses import dataclass
+import os
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
 import numpy as np
 import torch
@@ -25,23 +19,10 @@ try:
 except ImportError as exc:  # pragma: no cover - explicit runtime dependency guard
     raise SystemExit("Missing dependency 'faiss'. Install faiss-cpu/ faiss-gpu before running.") from exc
 
-BASE_DIR = Path(__file__).resolve().parent
-ROOT_DIR = BASE_DIR.parent
-FRAMES_DATASET_DIR = Path("data/frames_wiki_dataset")
-if not FRAMES_DATASET_DIR.exists():
-    FRAMES_DATASET_DIR = ROOT_DIR / "frames_wiki_dataset"
-PAGES_DIR = FRAMES_DATASET_DIR / "pages"
-OUTPUT_DIR = BASE_DIR / "faiss_index"
-CAPTIONS_PATH = FRAMES_DATASET_DIR / "image_captions.jsonl"
-CAPTION_INDEX_FILENAME = "frames_captions.index"
-CAPTION_CHUNKS_FILENAME = "frames_captions.jsonl"
-CAPTION_EMBEDDINGS_FILENAME = "frames_captions_embeddings.npy"
-CAPTION_METADATA_FILENAME = "frames_captions_meta.json"
+from parser.raganything_parser import RAGAnythingParser
 
-CHUNK_MIN_WORDS = 200
-CHUNK_MAX_WORDS = 350
-CHUNK_OVERLAP = 50
-MIN_PAGE_WORDS = 120
+# Fix OpenMP library conflict on macOS
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 
 DEFAULT_MODEL_NAME = "BAAI/bge-base-en-v1.5"
 DEFAULT_POOLING = "cls"
@@ -53,26 +34,36 @@ FAISS_INDEX_TYPE = "flat"  # or "ivf"
 FAISS_METRIC = "ip"  # "ip" or "l2"
 FAISS_NLIST = 100
 
-RUN_DEMO_QUERY = None
 
-
-@dataclass
-class EncoderConfig:
-    model_name: str = DEFAULT_MODEL_NAME
-    pooling: str = DEFAULT_POOLING
-    max_length: int = DEFAULT_MAX_LENGTH
-    normalize: bool = DEFAULT_NORMALIZE
+def _text_from_chunk(chunk: Dict[str, Any]) -> str:
+    meta = chunk.get("metadata") or {}
+    return (
+        chunk.get("enriched_description")
+        or chunk.get("text")
+        or meta.get("caption")
+        or meta.get("text")
+        or ""
+    )
 
 
 class TextEncoder:
     """Thin wrapper around a Hugging Face encoder with configurable pooling."""
 
-    def __init__(self, config: EncoderConfig):
-        self.config = config
+    def __init__(
+        self,
+        model_name: str = DEFAULT_MODEL_NAME,
+        pooling: str = DEFAULT_POOLING,
+        max_length: int = DEFAULT_MAX_LENGTH,
+        normalize: bool = DEFAULT_NORMALIZE,
+    ):
+        self.model_name = model_name
+        self.pooling = pooling
+        self.max_length = max_length
+        self.normalize = normalize
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         print(f"Using device: {self.device}")
-        self.tokenizer = AutoTokenizer.from_pretrained(config.model_name)
-        self.model = AutoModel.from_pretrained(config.model_name).to(self.device)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.model.eval()
         self.embedding_dim = self.model.config.hidden_size
 
@@ -86,21 +77,21 @@ class TextEncoder:
                 batch_texts,
                 padding=True,
                 truncation=True,
-                max_length=self.config.max_length,
+                max_length=self.max_length,
                 return_tensors="pt",
             ).to(self.device)
             with torch.no_grad():
                 outputs = self.model(**encoded)
                 token_embeddings = outputs.last_hidden_state
                 pooled = self._pool(token_embeddings, encoded["attention_mask"])
-                if self.config.normalize:
+                if self.normalize:
                     pooled = F.normalize(pooled, p=2, dim=1)
                 batch_arr = pooled.cpu().numpy().astype("float32")
                 all_embeddings.append(batch_arr)
         return np.vstack(all_embeddings)
 
     def _pool(self, token_embeddings: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
-        pooling = self.config.pooling.lower()
+        pooling = self.pooling.lower()
         if pooling == "cls":
             return token_embeddings[:, 0]
         if pooling == "mean":
@@ -108,126 +99,7 @@ class TextEncoder:
             summed = torch.sum(token_embeddings * mask, dim=1)
             counts = torch.clamp(mask.sum(dim=1), min=1e-6)
             return summed / counts
-        raise ValueError(f"Unsupported pooling strategy: {self.config.pooling}")
-
-
-def load_pages(pages_dir: Path, min_words: int = MIN_PAGE_WORDS) -> List[Dict[str, Any]]:
-    """Load text + metadata for each Wikipedia page."""
-    pages: List[Dict[str, Any]] = []
-    if not pages_dir.exists():
-        raise SystemExit(f"Missing pages directory: {pages_dir}")
-
-    for page_dir in sorted(pages_dir.iterdir()):
-        text_path = page_dir / "text.txt"
-        meta_path = page_dir / "meta.json"
-        if not text_path.exists():
-            continue
-        text = text_path.read_text(encoding="utf-8").strip()
-        if not text:
-            continue
-        if len(text.split()) < min_words:
-            continue
-        meta: Dict[str, Any] = {}
-        if meta_path.exists():
-            try:
-                meta = json.loads(meta_path.read_text(encoding="utf-8"))
-            except json.JSONDecodeError:
-                meta = {}
-        pages.append(
-            {
-                "page_id": page_dir.name,
-                "text": text,
-                "url": meta.get("url"),
-            }
-        )
-    print(f"Loaded {len(pages)} pages with >= {min_words} words.")
-    if not pages:
-        raise SystemExit("No valid pages found. Did you run build_frames_wiki_dataset.py?")
-    return pages
-
-
-def chunk_text(text: str, min_words: int, max_words: int, overlap: int) -> List[str]:
-    words = text.split()
-    if not words:
-        return []
-    if len(words) <= max_words:
-        return [" ".join(words)]
-
-    step = max(max_words - overlap, 1)
-    chunks: List[List[str]] = []
-    for start in range(0, len(words), step):
-        end = min(len(words), start + max_words)
-        chunk_words = words[start:end]
-        if len(chunk_words) < min_words and chunks:
-            chunks[-1].extend(chunk_words)
-        else:
-            chunks.append(chunk_words)
-
-    if chunks and len(chunks) >= 2 and len(chunks[-1]) < min_words:
-        chunks[-2].extend(chunks[-1])
-        chunks.pop()
-
-    return [" ".join(chunk) for chunk in chunks]
-
-
-def build_chunks(pages: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    records: List[Dict[str, Any]] = []
-    chunk_uid = 0
-    for page in pages:
-        chunk_texts = chunk_text(page["text"], CHUNK_MIN_WORDS, CHUNK_MAX_WORDS, CHUNK_OVERLAP)
-        for local_id, ctext in enumerate(chunk_texts):
-            record = {
-                "id": chunk_uid,
-                "page_id": page["page_id"],
-                "chunk_id": local_id,
-                "text": ctext,
-                "source_url": page.get("url"),
-            }
-            records.append(record)
-            chunk_uid += 1
-    print(f"Created {len(records)} text chunks.")
-    return records
-
-
-def load_captions(path: Path) -> List[Dict[str, Any]]:
-    """Load generated image captions from JSONL."""
-    captions: List[Dict[str, Any]] = []
-    if not path.exists():
-        raise SystemExit(f"Missing captions file: {path}. Run tools/build_frames_image_captions.py first.")
-    with path.open("r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                captions.append(json.loads(line))
-            except json.JSONDecodeError:
-                continue
-    if not captions:
-        raise SystemExit("Caption file is empty; nothing to index.")
-    return captions
-
-
-def build_caption_records(captions: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Normalize caption records into the same shape as text chunks."""
-    records: List[Dict[str, Any]] = []
-    for idx, cap in enumerate(captions):
-        caption_text = cap.get("caption") or cap.get("text") or ""
-        record = {
-            "id": idx,
-            "caption": caption_text,
-            "text": caption_text,  # keeps compatibility with text retriever code
-            "page_id": cap.get("page_id"),
-            "image_id": cap.get("image_id"),
-            "image_url": cap.get("image_url"),
-            "page_url": cap.get("page_url"),
-            "source_url": cap.get("page_url") or cap.get("source_url"),
-            "caption_type": cap.get("caption_type"),
-            "caption_model": cap.get("caption_model"),
-        }
-        records.append(record)
-    print(f"Loaded {len(records)} caption records for indexing.")
-    return records
+        raise ValueError(f"Unsupported pooling strategy: {self.pooling}")
 
 
 def build_faiss_index(
@@ -286,45 +158,22 @@ def write_metadata(
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
-def search_demo(query: str, encoder: TextEncoder, index: faiss.Index, chunks: Sequence[Dict[str, Any]], top_k: int = 5) -> None:
-    if not query:
-        return
-    if not chunks:
-        print("No chunks available for search demo.")
-        return
-    print(f"\n[demo] Searching for: {query!r}")
-    query_emb = encoder.encode([query])
-    distances, indices = index.search(query_emb, top_k)
-    for rank in range(min(top_k, len(chunks))):
-        chunk_index = int(indices[0][rank])
-        if chunk_index < 0 or chunk_index >= len(chunks):
-            continue
-        record = chunks[chunk_index]
-        score = float(distances[0][rank])
-        preview = record["text"][:160].replace("\n", " ") + "..."
-        print(f"  #{rank + 1} | score={score:.4f} | page={record.get('page_id')} | preview={preview}")
-
-
-def build_text_index(
-    encoder: TextEncoder,
+async def build_index(
+    doc_path: Path,
     output_dir: Path,
+    encoder: TextEncoder,
     index_type: str,
     metric: str,
     nlist: int,
-    run_demo_query: Optional[str],
 ) -> None:
-    start_time = time.time()
-    pages = load_pages(PAGES_DIR, MIN_PAGE_WORDS)
-    chunks = build_chunks(pages)
+    parser = RAGAnythingParser()
+    chunks = await parser.parse_and_enrich(doc_path)
     if not chunks:
-        raise SystemExit("No chunks generated. Check chunking parameters.")
+        raise SystemExit("No chunks produced by RAGAnything.")
 
-    chunk_texts = [record["text"] for record in chunks]
-    print(f"Encoding {len(chunk_texts)} chunks with {encoder.config.model_name}...")
-    encode_start = time.time()
-    embeddings = encoder.encode(chunk_texts, batch_size=ENCODING_BATCH_SIZE)
-    encode_time = time.time() - encode_start
-    print(f"Encoded {embeddings.shape[0]} chunks in {encode_time:.2f}s. Dim- {embeddings.shape[1]}")
+    texts = [_text_from_chunk(c) for c in chunks]
+    print(f"Encoding {len(texts)} chunks with {encoder.model_name}...")
+    embeddings = encoder.encode(texts, batch_size=ENCODING_BATCH_SIZE)
 
     index = build_faiss_index(embeddings, index_type=index_type, metric=metric, nlist=nlist)
     print(f"FAISS index built ({index.__class__.__name__}) with {index.ntotal} vectors.")
@@ -337,103 +186,42 @@ def build_text_index(
         output_dir / "metadata.json",
         num_chunks=len(chunks),
         embedding_dim=embeddings.shape[1],
-        encoder_name=encoder.config.model_name,
+        encoder_name=encoder.model_name,
         faiss_index_type=index.__class__.__name__,
-        extra={"mode": "text"},
+        extra={"source": str(doc_path)},
     )
-
-    elapsed = time.time() - start_time
-    print(f"[text] Saved FAISS resources to {output_dir.resolve()} (pages={len(pages)}, chunks={len(chunks)}, elapsed={elapsed:.2f}s).")
-
-    if run_demo_query:
-        search_demo(run_demo_query, encoder, index, chunks)
-
-
-def build_caption_index(
-    encoder: TextEncoder,
-    captions_path: Path,
-    output_dir: Path,
-    index_type: str,
-    metric: str,
-    nlist: int,
-    run_demo_query: Optional[str],
-) -> None:
-    start_time = time.time()
-    captions = load_captions(captions_path)
-    caption_records = build_caption_records(captions)
-    texts = [rec["text"] for rec in caption_records]
-
-    print(f"Encoding {len(texts)} captions with {encoder.config.model_name}...")
-    encode_start = time.time()
-    embeddings = encoder.encode(texts, batch_size=ENCODING_BATCH_SIZE)
-    encode_time = time.time() - encode_start
-    print(f"Encoded {embeddings.shape[0]} captions in {encode_time:.2f}s. Dim- {embeddings.shape[1]}")
-
-    index = build_faiss_index(embeddings, index_type=index_type, metric=metric, nlist=nlist)
-    print(f"FAISS caption index built ({index.__class__.__name__}) with {index.ntotal} vectors.")
-
-    output_dir.mkdir(parents=True, exist_ok=True)
-    np.save(output_dir / CAPTION_EMBEDDINGS_FILENAME, embeddings)
-    faiss.write_index(index, str(output_dir / CAPTION_INDEX_FILENAME))
-    save_chunks(output_dir / CAPTION_CHUNKS_FILENAME, caption_records)
-    write_metadata(
-        output_dir / CAPTION_METADATA_FILENAME,
-        num_chunks=len(caption_records),
-        embedding_dim=embeddings.shape[1],
-        encoder_name=encoder.config.model_name,
-        faiss_index_type=index.__class__.__name__,
-        extra={"mode": "caption", "captions_source": str(captions_path)},
-    )
-
-    elapsed = time.time() - start_time
-    print(
-        f"[caption] Saved FAISS resources to {output_dir.resolve()} "
-        f"(captions={len(caption_records)}, elapsed={elapsed:.2f}s)."
-    )
-
-    if run_demo_query:
-        search_demo(run_demo_query, encoder, index, caption_records)
+    print(f"Saved FAISS resources to {output_dir.resolve()} (chunks={len(chunks)}).")
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build FAISS indices for Frames wiki text and/or captions.")
-    parser.add_argument("--mode", choices=["text", "caption", "both"], default="text", help="Which index to build.")
-    parser.add_argument("--captions_path", type=str, default=str(CAPTIONS_PATH), help="Path to generated captions JSONL.")
-    parser.add_argument("--output_dir", type=str, default=str(OUTPUT_DIR), help="Directory for saving FAISS assets.")
+    parser = argparse.ArgumentParser(description="Build FAISS index from a document parsed by RAGAnything.")
+    parser.add_argument("--doc_path", type=str, required=True, help="Path to the document to index.")
+    parser.add_argument("--output_dir", type=str, required=True, help="Directory for saving FAISS assets.")
     parser.add_argument("--index_type", choices=["flat", "ivf"], default=FAISS_INDEX_TYPE, help="FAISS index type.")
     parser.add_argument("--metric", choices=["ip", "l2"], default=FAISS_METRIC, help="Similarity metric.")
     parser.add_argument("--nlist", type=int, default=FAISS_NLIST, help="Number of IVF clusters (when using IVF).")
-    parser.add_argument("--demo_query", type=str, default=RUN_DEMO_QUERY, help="Optional demo query for quick sanity check.")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    encoder_config = EncoderConfig()
-    encoder = TextEncoder(encoder_config)
+    doc_path = Path(args.doc_path)
     output_dir = Path(args.output_dir)
-    captions_path = Path(args.captions_path)
+    encoder = TextEncoder()
 
-    if args.mode in {"text", "both"}:
-        build_text_index(
-            encoder,
+    async def _run() -> None:
+        await build_index(
+            doc_path=doc_path,
             output_dir=output_dir,
+            encoder=encoder,
             index_type=args.index_type,
             metric=args.metric,
             nlist=args.nlist,
-            run_demo_query=args.demo_query,
         )
-    if args.mode in {"caption", "both"}:
-        build_caption_index(
-            encoder,
-            captions_path=captions_path,
-            output_dir=output_dir,
-            index_type=args.index_type,
-            metric=args.metric,
-            nlist=args.nlist,
-            run_demo_query=args.demo_query,
-        )
+
+    asyncio.run(_run())
 
 
 if __name__ == "__main__":
     main()
+
