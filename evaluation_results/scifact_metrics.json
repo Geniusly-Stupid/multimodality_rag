@@ -1,0 +1,17 @@
+{
+  "total": 300,
+  "ndcg": 0.7351236918857305,
+  "map": 0.7030185185185188,
+  "recall@k": 0.8142777777777778,
+  "top_k": 5,
+  "multimodal": true,
+  "text_weight": 0.6,
+  "image_weight": 0.4,
+  "text_only_metrics": {
+    "ndcg": 0.7351236918857305,
+    "map": 0.7030185185185188,
+    "recall@k": 0.8142777777777778
+  },
+  "total_image_results": 0,
+  "avg_images_per_query": 0.0
+}

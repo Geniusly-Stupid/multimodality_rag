@@ -1,0 +1,11 @@
+221 Eos is a large main-belt asteroid that was discovered by Austrian astronomer Johann Palisa on January 18, 1882, in Vienna. In 1884, it was named after Eos, the Greek goddess of the dawn, to honour the opening of a new observatory that was hoped to bring about a new dawn for Viennese astronomy.
+The asteroid is orbiting the Sun with a semimajor axis of 3.01 AU, a period of 5.22 years, and an eccentricity of 0.1. The orbital plane is inclined by 10.9° to the plane of the ecliptic. It has a mean cross-section of 104 km, and is spinning with a rotation period of 10.4 hours. Based upon its spectral characteristics, this object is classified as a K-type asteroid. The orbital properties show it to be a member of the extensive Eos asteroid family, which is named after it. The spectral properties of the asteroid suggest it may have come from a partially differentiated parent body.
+
+References
+External links
+The Asteroid Orbital Elements Database
+Minor Planet Discovery Circumstances
+Asteroid Lightcurve Data File
+221 Eos at AstDyS-2, Asteroids—Dynamic Site
+Ephemeris · Observation prediction · Orbital info · Proper elements · Observational info
+221 Eos at the JPL Small-Body Database

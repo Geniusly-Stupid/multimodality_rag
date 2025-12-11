@@ -1,0 +1,6 @@
+{
+  "num_chunks": 30095,
+  "embedding_dim": 768,
+  "encoder_name": "BAAI/bge-base-en-v1.5",
+  "faiss_index_type": "IndexFlatIP"
+}

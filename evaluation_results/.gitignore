@@ -1,0 +1,5 @@
+#
+# Ignore all files within this evaluation_results directory
+*
+
+!.gitignore

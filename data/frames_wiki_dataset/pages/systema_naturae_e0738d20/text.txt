@@ -1,0 +1,67 @@
+Systema Naturae (originally in Latin written Systema Naturæ with the ligature æ) is one of the major works of the Swedish botanist, zoologist and physician Carl Linnaeus (1707–1778) and introduced the Linnaean taxonomy. Although the system, now known as binomial nomenclature, was partially developed by the Bauhin brothers, Gaspard and Johann, Linnaeus was the first to use it consistently throughout his book. The first edition was published in 1735. The full title of the 10th edition (1758), which was the most important one, was Systema naturæ per regna tria naturæ, secundum classes, ordines, genera, species, cum characteribus, differentiis, synonymis, locis, which appeared in English in 1806 with the title: "A General System of Nature, Through the Three Grand Kingdoms of Animals, Vegetables, and Minerals, Systematically Divided Into their Several Classes, Orders, Genera, Species, and Varieties, with their Habitations, Manners, Economy, Structure and Peculiarities".
+The tenth edition of this book (1758), published in Stockholm, is considered the starting point of zoological nomenclature. In 1766–1768 Linnaeus published the much enhanced 12th edition, the last under his authorship. Another again enhanced work in the same style titled "Systema Naturae" was published by Johann Friedrich Gmelin between 1788 and 1793. Since at least the early 20th century, zoologists have commonly recognized this as the last edition belonging to this series.
+
+Overview
+Linnaeus (later known as "Carl von Linné", after his ennoblement in 1761) published the first edition of Systema Naturae in the year 1735, during his stay in the Netherlands. As was customary for the scientific literature of its day, the book was published in Latin. In it, he outlined his ideas for the hierarchical classification of the natural world, dividing it into the animal kingdom (regnum animale), the plant kingdom (regnum vegetabile), and the "mineral kingdom" (regnum lapideum).
+Linnaeus's Systema Naturae lists only about 10,000 species of organisms, of which about 6,000 are plants and 4,236 are animals. According to the historian of botany William T. Stearn, "Even in 1753 he believed that the number of species of plants in the whole world would hardly reach 10,000; in his whole career he named about 7,700 species of flowering plants."
+Linnaeus developed his classification of the plant kingdom in an attempt to describe and understand the natural world as a reflection of the logic of God's creation. His sexual system, where species with the same number of stamens were treated in the same group, was convenient but in his view artificial. Linnaeus believed in God's creation and that there were no deeper relationships to be expressed. The classification of animals was more natural . For instance, humans were for the first time placed together with other primates, as Anthropomorpha. They were also divided into four varieties, as distinguished by skin color and corresponding with the four known continents and temperaments. The tenth edition expanded on these varieties with behavioral and cultural traits that the Linnean Society acknowledges as having cemented colonial stereotypes and provided one of the foundations for scientific racism.
+As a result of the popularity of the work, and the number of new specimens sent to him from around the world, Linnaeus kept publishing new and ever-expanding editions of his work. It grew from eleven very large pages in the first edition (1735) to 2,400 pages in the 12th edition (1766–1768). Also, as the work progressed, he made changes: in the first edition, whales were classified as fishes, following the work of Linnaeus' friend and "father of ichthyology" Peter Artedi; in the 10th edition, published in 1758, whales were moved into the mammal class. In this same edition, he introduced two-part names (see binomen) for animal species, something that he had done for plant species (see binary name) in the 1753 publication of Species Plantarum. The system eventually developed into modern Linnaean taxonomy, a hierarchically organized biological classification.
+After Linnaeus' health declined in the early 1770s, publication of editions of Systema Naturae went in two directions. Another Swedish scientist, Johan Andreas Murray issued the Regnum Vegetabile section separately in 1774 as the Systema Vegetabilium, rather confusingly labelled the 13th edition. Meanwhile, a 13th edition of the entire Systema appeared in parts between 1788 and 1793. It was as the Systema Vegetabilium that Linnaeus' work became widely known in England following translation from the Latin by the Lichfield Botanical Society, as A System of Vegetables (1783–1785).
+
+Taxonomy
+In his Imperium Naturæ, Linnaeus established three kingdoms, namely Regnum Animale, Regnum Vegetabile and Regnum Lapideum. This approach, the Animal, Vegetable and Mineral Kingdoms, survives until today in the popular mind, notably in the form of parlour games: "Is it animal, vegetable or mineral?" The classification was based on five levels: kingdom, class, order, genus, and species. While species and genus was seen as God-given (or "natural"), the three higher levels were seen by Linnaeus as constructs. The concept behind the set ranks being applied to all groups was to make a system that was easy to remember and navigate, a task which most say he succeeded in.
+
+Linnaeus's work had a huge impact on science; it was indispensable as a foundation for biological nomenclature, now regulated by the Nomenclature Codes. Two of his works, the first edition of the Species Plantarum (1753) for plants and the 10th edition of the Systema Naturæ (1758), are accepted to be among the starting points of nomenclature. Most of his names for species and genera were published at very early dates, and thus take priority over those of other, later authors. In zoology there is one exception, which is a monograph on Swedish spiders, Svenska Spindlar, published by Carl Clerck in 1757, so the names established there take priority over the Linnean names. His exceptional importance to science was less in the value of his taxonomy, more in his deployment of skilful young students abroad to collect specimens. At the close of the 18th century, his system had effectively become the standard for biological classification.
+
+Animals
+Only in the animal kingdom is the higher taxonomy of Linnaeus still more or less recognizable and some of these names are still in use, but usually not quite for the same groups as used by Linnaeus. He divided the Animal Kingdom into six classes; in the tenth edition (1758), these were:
+
+Mammalia comprised the mammals. In the first edition, whales and the West Indian manatee were classified among the fishes.
+Aves comprised the birds. Linnaeus was the first to remove bats from the birds and classify them under mammals.
+Amphibia comprised amphibians, reptiles, and assorted fishes that are not of Osteichthyes.
+Pisces comprised the bony fishes. These included the spiny-finned fishes (Perciformes) as a separate order.
+Insecta comprised all arthropods. Crustaceans, arachnids and myriapods were included as the order "Aptera".
+Vermes comprised the remaining invertebrates, roughly divided into "worms", molluscs, and hard-shelled organisms like echinoderms.
+
+Humans
+Linnaeus was one of the first scientists to classify humans as primates (originally Anthropomorpha for "manlike"), eliciting some controversy for placing people among animals and thus not ruling over nature. He distinguished humans (Homo sapiens) from Homo troglodytes, a species of human-like creatures with exaggerated or non-human characteristics, despite finding limited evidence. He divided Homo sapiens into four varieties, corresponding with the four known continents and four temperaments (some editions also classify Ferus wild children and Monstrosus monstrous to accommodate adaptations to extreme environments). The first edition included Europæus albescens (whitish Europeans), Americanus rubescens (reddish Americans), Asiaticus fuscus (tawny Asians), and Africanus nigriculus (blackish Africans). The tenth edition solidified these descriptions by removing the "ish" qualifiers (e.g. albus "white" instead of albescens "whitish") and revising the characterization of Asiaticus from fuscus (tawny) to luridus (pale yellow). It also incorporates behavioral and cultural traits that the Linnean Society recognizes as having cemented colonial stereotypes and provided one of the foundations for scientific racism.
+
+Plants
+The orders and classes of plants, according to his Systema Sexuale, were never intended to represent natural groups (as opposed to his ordines naturales in his Philosophia Botanica) but only for use in identification. They were used in that sense well into the 19th century.
+
+The Linnaean classes for plants, in the Sexual System, were:
+
+Minerals
+Linnaeus's taxonomy of minerals has long since fallen out of use. In the 10th edition, 1758, of the Systema Naturæ, the Linnaean classes were:
+
+Classis 1. Petræ (rocks)
+Classis 2. Mineræ (minerals and ores)
+Classis 3. Fossilia (fossils and aggregates)
+
+Editions
+Gmelin's thirteenth (decima tertia) edition of  Systema Naturae (1788–1793) should be carefully distinguished from the more limited  Systema Vegetabilium first prepared and published  by Johan Andreas Murray in 1774 (but labelled as "thirteenth edition").
+
+The dates of publication for Gmelin's edition were the following: 
+
+Part 1: pp. [1–12], 1–500 (25 July 1788)
+Part 2: pp. 501–1032 (20 April 1789)
+Part 3: pp. 1033–1516 (20 November 1789)
+Part 4: pp. 1517–2224 (21 May 1790)
+Part 5: pp. 2225–3020 (6 December 1790)
+Part 6: pp. 3021–3910 (14 May 1791)
+Part 7: pp. 3911–4120 (2 July 1792)
+
+See also
+Supplementum Plantarum
+Animalia Paradoxa
+10th edition of Systema Naturae
+12th edition of Systema Naturae
+Systema Vegetabilium
+English edition by William Turton, translated from Gmelin's last edition. https://doi.org/10.5962/bhl.title.37018
+
+References
+Bibliography
+External links
+
+Linné online
+Systema Naturae is available for free viewing and download at the Internet Archive

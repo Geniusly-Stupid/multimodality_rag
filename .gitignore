@@ -146,15 +146,40 @@ static/
 text_embeddings.pt
 training_log.json
 
+<<<<<<< HEAD
 # Obsolete scripts
 build_faiss_index.py
 
+=======
+>>>>>>> origin/img-caption
 # Data - Assuming this should not be in the repo
 images/
 adaptive-alpha/analysis_results/
 adaptive-alpha/problems.json
 adaptive-alpha/processed_problems.json
 
+<<<<<<< HEAD
 # Training artifacts
 adaptive-alpha/training_ids.json
 adaptive-alpha/training_metrics.png
+=======
+data/flickr8k
+data/flickr8k.zip
+
+# Training artifacts
+adaptive-alpha/training_ids.json
+adaptive-alpha/training_metrics.png
+
+# Large model files and caches
+**/huggingface_cache/
+**/cache/
+D:/
+*.faiss
+retriever/faiss_index/*.faiss
+retriever/faiss_index/*.npy
+retriever/faiss_index/chunks.jsonl
+retriever/faiss_index/images/*.faiss
+retriever/faiss_index/images/*.npy
+retriever/faiss_index/images/*.jsonl
+evaluation_results/*.jsonl
+>>>>>>> origin/img-caption

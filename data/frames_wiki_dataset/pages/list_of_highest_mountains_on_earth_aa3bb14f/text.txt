@@ -1,0 +1,35 @@
+There are at least 108 mountains on Earth with elevations of 7,200 m (23,622 ft; 4 mi) or greater above sea level. Of these, 14 are more than 8,000 m (26,247 ft; 5 mi). The vast majority of these mountains are part of either the Himalayas or the Karakoram mountain ranges located on the edge of the Indian Plate and Eurasian Plate in China, India, Nepal, and Pakistan.
+
+Discussion
+The dividing line between a mountain with multiple  peaks and separate mountains is not always clear (see also Highest unclimbed mountain). A popular and intuitive way to distinguish mountains from subsidiary peaks is by their height above the highest saddle connecting it to a higher summit, a measure called topographic prominence or re-ascent (the higher summit is called the "parent peak"). A common definition of a mountain is a summit with 300 m (984 ft) prominence. Alternatively, a relative prominence (prominence/height) is used (usually 7–8%) to reflect that in higher mountain ranges everything is on a larger scale. The table below lists the highest 100 summits with at least 500 m (1,640 ft) prominence, approximating a 7% relative prominence. A drawback of a prominence-based list is that it may exclude well-known or spectacular mountains that are connected via a high ridge to a taller summit, such as Eiger, Nuptse or Annapurna IV. A few such peaks and mountains with nearly sufficient prominence are included in this list, and given a rank of "S".
+It is very unlikely that all given heights are correct to the nearest metre; indeed, the sea level is often problematic to define when a mountain is remote from the sea. Different sources often differ by many metres, and the heights given below may well differ from those elsewhere in this encyclopedia. As an extreme example, Ulugh Muztagh on the north Tibetan Plateau is often listed as 7,723 m (25,338 ft) to 7,754 m (25,440 ft), but appears to be only 6,973 m (22,877 ft) to 6,987 m (22,923 ft). Some mountains differ by more than 100 m (330 ft) on different maps, while even very thorough current measurements of Mount Everest range from 8,840 m (29,003 ft) to 8,849 m (29,032 ft). These discrepancies serve to emphasize the uncertainties in the listed heights.
+Though some parts of the world, especially the most mountainous parts, have never been thoroughly mapped, it is unlikely that any mountains this high have been overlooked, because synthetic aperture radar can and has been used to measure elevations of most otherwise inaccessible places. Still, heights or prominences may be revised, so that the order of the list may change and even new mountains could enter the list over time. To be safe, the list has been extended to include all 7,200 m (23,622 ft) peaks.
+The highest mountains above sea level are generally not the highest mountains above the surrounding terrain, also called the highest free-standing mountains. There is no precise definition of surrounding base, but Denali, Mount Kilimanjaro and Nanga Parbat are possible candidates for the tallest mountain on land by this measure.
+The bases of mountain islands are below sea level, and given this consideration. Mauna Kea (4,207 m (13,802 ft) above sea level) is the world's tallest mountain and volcano, rising about 10,203 m (33,474 ft) from the Pacific Ocean floor. Mount Lamlam on Guam is periodically claimed to be among the world's highest mountains because it is adjacent to the Mariana Trench; the most extreme claim is that, measured from Challenger Deep 313 kilometres (194 mi) away, Mount Lamlam is 11,530 metres (37,820 ft) tall. Ojos del Salado has the greatest rise on Earth: 13,420 m (44,029 ft) vertically to the summit from the bottom of the Atacama Trench, which is about 560 km (350 mi) away, although most of this rise is not part of the mountain.
+The highest mountains are also not generally the most voluminous. Mauna Loa (4,169 m or 13,678 ft) is the largest mountain on Earth in terms of base area (about 5,200 km2 or 2,000 sq mi) and volume (about 42,000 km3 or 10,000 cu mi), although, due to the intergrade of lava from Kilauea, Hualalai and Mauna Kea, the volume can only be estimated based on surface area and height of the edifice. Mount Kilimanjaro is the largest non-shield volcano in terms of both base area (635 km2 or 245 sq mi) and volume (4,793 km3 or 1,150 cu mi). Mount Logan is the largest non-volcanic mountain in base area (311 km2 or 120 sq mi).
+The highest mountains above sea level are also not those with peaks farthest from the centre of the Earth, because the shape of the Earth is not spherical. Sea level closer to the equator is several kilometres farther from the centre of the Earth. The summit of Chimborazo, Ecuador's tallest mountain, is usually considered to be the farthest point from the Earth's centre, although the southern summit of Peru's tallest mountain, Huascarán, is another contender. Both have elevations above sea level more than 2 km (1.2 mi) less than that of Everest.
+
+Geographical distribution
+Almost all mountains in the list are located in the Himalaya and Karakoram ranges to the south and west of the Tibetan plateau. All peaks 7,000 m (22,966 ft) or higher are located in East, Central or South Asia in a rectangle edged by Noshaq (7,492 m or 24,580 ft) on the Afghanistan–Pakistan border in the west, Jengish Chokusu (Tuōmù'ěr Fēng, 7,439 m or 24,406 ft) on the Kyrgyzstan–Xinjiang border to the north, Gongga Shan (Minya Konka, 7,556 m or 24,790 ft) in Sichuan to the east, and Kabru (7,412 m or 24,318 ft) on the Sikkim–Nepal border to the south.
+As of May 2025, the highest peaks on three of the mountains—Gangkhar Puensum, Labuche Kang III and Tongshanjiabu, all located in Bhutan or China—have not been ascended. The most recent peak to have its first ever ascent is Karjiang, in China, on 13 August 2024.
+The highest mountain outside of Asia is Aconcagua (6,961 m or 22,838 ft), the 189th highest in the world.
+
+List of highest peaks
+Gallery
+See also
+List of mountain ranges of the world
+List of tallest mountains in the Solar System
+Olympus Mons, the tallest mountain on any planet in the Solar System
+Rheasilvia crater's central peak, the tallest mountain in the Solar System
+List of elevation extremes by country
+
+Notes
+References
+Sources
+External links
+SummitPost.org (currently with detailed description of 30 of the top 100 peaks)
+Prominence lists (including all mountains in the world with >1,450m prominence)
+Alpine Club Himalayan index (Especially informative for history of ascents and location of obscure peaks)
+BlankontheMap site on mountains of Northern Kashmir (in French)
+Hispar area: expedition reports and maps
+List of highest mountains down to 6750 metres
