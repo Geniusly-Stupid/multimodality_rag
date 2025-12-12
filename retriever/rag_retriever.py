@@ -12,6 +12,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from transformers import AutoModel, AutoTokenizer
+from tqdm import tqdm
 
 # Default locations (new preferred under retriever/, fallback to legacy root)
 BASE_DIR = Path(__file__).resolve().parent
@@ -44,17 +45,20 @@ class TextEncoder:
     def __init__(self, config: Optional[EncoderConfig] = None):
         self.config = config or EncoderConfig()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        print("TextEncoder device:", self.device)
         self.tokenizer = AutoTokenizer.from_pretrained(self.config.model_name)
         self.model = AutoModel.from_pretrained(self.config.model_name).to(self.device)
         self.model.eval()
         self.embedding_dim = self.model.config.hidden_size
 
-    def encode(self, texts: Sequence[str], batch_size: int = 16) -> np.ndarray:
+    def encode(self, texts: Sequence[str], batch_size: int = 128) -> np.ndarray:
         """Encode a list of texts into float32 numpy vectors."""
+        # print(len(texts))
         if not texts:
             return np.zeros((0, self.embedding_dim), dtype="float32")
         vectors: List[np.ndarray] = []
-        for start in range(0, len(texts), batch_size):
+
+        for start in tqdm(range(0, len(texts), batch_size), desc="Encoding batches"):
             batch = texts[start : start + batch_size]
             encoded = self.tokenizer(
                 batch,
@@ -63,13 +67,16 @@ class TextEncoder:
                 max_length=self.config.max_length,
                 return_tensors="pt",
             ).to(self.device)
+
             with torch.no_grad():
                 outputs = self.model(**encoded)
                 token_embeddings = outputs.last_hidden_state
                 pooled = self._pool(token_embeddings, encoded["attention_mask"])
                 if self.config.normalize:
                     pooled = F.normalize(pooled, p=2, dim=1)
+
             vectors.append(pooled.cpu().numpy().astype("float32"))
+
         return np.vstack(vectors)
 
     def _pool(self, token_embeddings: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:

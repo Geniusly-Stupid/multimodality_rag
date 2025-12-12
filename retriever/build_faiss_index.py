@@ -1,9 +1,8 @@
-"""Build a FAISS index from RAGAnything-parsed chunks (text/caption only)."""
+"""Build a FAISS index from pre-parsed JSON chunks or raw txt files (two input modes)."""
 
 from __future__ import annotations
 
 import argparse
-import asyncio
 import json
 import os
 from pathlib import Path
@@ -13,13 +12,12 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from transformers import AutoModel, AutoTokenizer
+from tqdm import tqdm
 
 try:
     import faiss
 except ImportError as exc:  # pragma: no cover - explicit runtime dependency guard
     raise SystemExit("Missing dependency 'faiss'. Install faiss-cpu/ faiss-gpu before running.") from exc
-
-from parser.raganything_parser import RAGAnythingParser
 
 # Fix OpenMP library conflict on macOS
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
@@ -34,18 +32,78 @@ FAISS_INDEX_TYPE = "flat"  # or "ivf"
 FAISS_METRIC = "ip"  # "ip" or "l2"
 FAISS_NLIST = 100
 
-
-def _text_from_chunk(chunk: Dict[str, Any]) -> str:
-    meta = chunk.get("metadata") or {}
-    return (
-        chunk.get("enriched_description")
-        or chunk.get("text")
-        or meta.get("caption")
-        or meta.get("text")
-        or ""
-    )
+CHUNK_MIN_WORDS = 250
+CHUNK_MAX_WORDS = 400
+CHUNK_OVERLAP = 50
 
 
+# ---------------------------- Loading ---------------------------- #
+def chunk_text(text: str, min_words: int = CHUNK_MIN_WORDS, max_words: int = CHUNK_MAX_WORDS, overlap: int = CHUNK_OVERLAP) -> List[str]:
+    words = text.split()
+    if not words:
+        return []
+    if len(words) <= max_words:
+        return [" ".join(words)]
+
+    step = max(max_words - overlap, 1)
+    chunks: List[List[str]] = []
+    for start in range(0, len(words), step):
+        end = min(len(words), start + max_words)
+        chunk_words = words[start:end]
+        if len(chunk_words) < min_words and chunks:
+            chunks[-1].extend(chunk_words)
+        else:
+            chunks.append(chunk_words)
+
+    if chunks and len(chunks) >= 2 and len(chunks[-1]) < min_words:
+        chunks[-2].extend(chunks[-1])
+        chunks.pop()
+
+    return [" ".join(chunk) for chunk in chunks]
+
+
+def load_chunks_from_folder(folder: str) -> List[Dict[str, Any]]:
+    """Load chunks from a folder containing either JSON (enriched chunks) or raw txt files."""
+    root = Path(folder)
+    if not root.exists() or not root.is_dir():
+        raise ValueError(f"Input folder does not exist: {folder}")
+
+    json_files = sorted(root.glob("*.json"))
+    txt_files = sorted(root.glob("*.txt"))
+
+    chunks: List[Dict[str, Any]] = []
+
+    if json_files:
+        for jf in json_files:
+            data = json.loads(jf.read_text(encoding="utf-8"))
+            if isinstance(data, list):
+                chunks.extend(data)
+            elif isinstance(data, dict) and isinstance(data.get("chunks"), list):
+                chunks.extend(data["chunks"])
+            else:
+                raise ValueError(f"Unsupported JSON structure in {jf}")
+        return chunks
+
+    if txt_files:
+        uid = 0
+        for tf in txt_files:
+            text = tf.read_text(encoding="utf-8").strip()
+            for piece in chunk_text(text):
+                chunks.append(
+                    {
+                        "id": uid,
+                        "type": "text",
+                        "content": piece,
+                        "metadata": {"source_name": tf.stem},
+                    }
+                )
+                uid += 1
+        return chunks
+
+    raise ValueError("Folder must contain .json or .txt files.")
+
+
+# ---------------------------- Embedding ---------------------------- #
 class TextEncoder:
     """Thin wrapper around a Hugging Face encoder with configurable pooling."""
 
@@ -71,7 +129,8 @@ class TextEncoder:
         if not texts:
             return np.zeros((0, self.embedding_dim), dtype="float32")
         all_embeddings: List[np.ndarray] = []
-        for start in range(0, len(texts), batch_size):
+        total = len(texts)
+        for start in tqdm(range(0, total, batch_size), desc="Encoding", unit="batch"):
             batch_texts = texts[start : start + batch_size]
             encoded = self.tokenizer(
                 batch_texts,
@@ -88,7 +147,9 @@ class TextEncoder:
                     pooled = F.normalize(pooled, p=2, dim=1)
                 batch_arr = pooled.cpu().numpy().astype("float32")
                 all_embeddings.append(batch_arr)
+
         return np.vstack(all_embeddings)
+
 
     def _pool(self, token_embeddings: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
         pooling = self.pooling.lower()
@@ -102,6 +163,20 @@ class TextEncoder:
         raise ValueError(f"Unsupported pooling strategy: {self.pooling}")
 
 
+def _text_from_chunk(chunk: Dict[str, Any]) -> str:
+    if "content" in chunk:
+        return str(chunk.get("content") or "")
+    meta = chunk.get("metadata") or {}
+    return str(chunk.get("enriched_description") or chunk.get("text") or meta.get("caption") or meta.get("text") or "")
+
+
+def embed_chunks(chunks: List[Dict[str, Any]], encoder: TextEncoder) -> np.ndarray:
+    texts = [_text_from_chunk(c) for c in chunks]
+    print(f"Encoding {len(texts)} chunks with {encoder.model_name}...")
+    return encoder.encode(texts, batch_size=ENCODING_BATCH_SIZE)
+
+
+# ---------------------------- FAISS build/save ---------------------------- #
 def build_faiss_index(
     embeddings: np.ndarray,
     index_type: str = FAISS_INDEX_TYPE,
@@ -158,23 +233,15 @@ def write_metadata(
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
-async def build_index(
-    doc_path: Path,
+def build_and_save_index(
+    embeddings: np.ndarray,
+    chunks: List[Dict[str, Any]],
     output_dir: Path,
-    encoder: TextEncoder,
     index_type: str,
     metric: str,
     nlist: int,
+    encoder_name: str,
 ) -> None:
-    parser = RAGAnythingParser()
-    chunks = await parser.parse_and_enrich(doc_path)
-    if not chunks:
-        raise SystemExit("No chunks produced by RAGAnything.")
-
-    texts = [_text_from_chunk(c) for c in chunks]
-    print(f"Encoding {len(texts)} chunks with {encoder.model_name}...")
-    embeddings = encoder.encode(texts, batch_size=ENCODING_BATCH_SIZE)
-
     index = build_faiss_index(embeddings, index_type=index_type, metric=metric, nlist=nlist)
     print(f"FAISS index built ({index.__class__.__name__}) with {index.ntotal} vectors.")
 
@@ -186,16 +253,16 @@ async def build_index(
         output_dir / "metadata.json",
         num_chunks=len(chunks),
         embedding_dim=embeddings.shape[1],
-        encoder_name=encoder.model_name,
+        encoder_name=encoder_name,
         faiss_index_type=index.__class__.__name__,
-        extra={"source": str(doc_path)},
     )
     print(f"Saved FAISS resources to {output_dir.resolve()} (chunks={len(chunks)}).")
 
 
+# ---------------------------- CLI ---------------------------- #
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build FAISS index from a document parsed by RAGAnything.")
-    parser.add_argument("--doc_path", type=str, required=True, help="Path to the document to index.")
+    parser = argparse.ArgumentParser(description="Build FAISS index from pre-parsed JSON chunks or raw txt files in a folder.")
+    parser.add_argument("--input_folder", type=str, required=True, help="Folder containing .json (parsed chunks) or .txt (raw text).")
     parser.add_argument("--output_dir", type=str, required=True, help="Directory for saving FAISS assets.")
     parser.add_argument("--index_type", choices=["flat", "ivf"], default=FAISS_INDEX_TYPE, help="FAISS index type.")
     parser.add_argument("--metric", choices=["ip", "l2"], default=FAISS_METRIC, help="Similarity metric.")
@@ -205,23 +272,19 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    doc_path = Path(args.doc_path)
-    output_dir = Path(args.output_dir)
+    chunks = load_chunks_from_folder(args.input_folder)
     encoder = TextEncoder()
-
-    async def _run() -> None:
-        await build_index(
-            doc_path=doc_path,
-            output_dir=output_dir,
-            encoder=encoder,
-            index_type=args.index_type,
-            metric=args.metric,
-            nlist=args.nlist,
-        )
-
-    asyncio.run(_run())
+    embeddings = embed_chunks(chunks, encoder)
+    build_and_save_index(
+        embeddings=embeddings,
+        chunks=chunks,
+        output_dir=Path(args.output_dir),
+        index_type=args.index_type,
+        metric=args.metric,
+        nlist=args.nlist,
+        encoder_name=encoder.model_name,
+    )
 
 
 if __name__ == "__main__":
     main()
-

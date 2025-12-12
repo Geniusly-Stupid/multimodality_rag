@@ -101,6 +101,8 @@ class RetrieverAdapter:
             return ""
         if chunk.get("text"):
             return str(chunk["text"])
+        if chunk.get("content"):
+            return str(chunk["content"])
         meta = chunk.get("metadata") or {}
         if isinstance(meta, dict):
             if meta.get("caption"):
@@ -109,23 +111,49 @@ class RetrieverAdapter:
                 return str(meta["text"])
         return ""
 
-    def build_index(self, chunks: Sequence[Dict[str, Any]]) -> None:
+    def _normalize_metadata(self, chunk: Dict[str, Any], text: str) -> Dict[str, Any]:
+        metadata = dict(chunk)
+        inner_meta = metadata.get("metadata") or {}
+        if not metadata.get("text") and not metadata.get("content"):
+            metadata["text"] = text
+        if inner_meta.get("caption") and not metadata.get("caption"):
+            metadata["caption"] = inner_meta.get("caption")
+        if metadata.get("image") and not metadata.get("modality"):
+            metadata["modality"] = "caption" if metadata.get("caption") else "text"
+        return metadata
+
+    def build_index(self, chunks: Sequence[Dict[str, Any]], batch_size: int = 128) -> None:
+        texts: List[str] = []
+        metas: List[Dict[str, Any]] = []
+        ids: List[Any] = []
+
         for c in chunks:
             text = self._text_for_chunk(c)
             if not text:
                 continue
-            emb = self._encode_text(text)
-            if emb is None:
-                continue
-            metadata = dict(c)
-            inner_meta = metadata.get("metadata") or {}
-            if not metadata.get("text"):
-                metadata["text"] = text
-            if inner_meta.get("caption") and not metadata.get("caption"):
-                metadata["caption"] = inner_meta.get("caption")
-            if metadata.get("image") and not metadata.get("modality"):
-                metadata["modality"] = "caption" if metadata.get("caption") else "text"
-            self.vector_store.add(doc_id=c.get("id"), vector=emb, metadata=metadata)
+            texts.append(text)
+            metas.append(self._normalize_metadata(c, text))
+            ids.append(c.get("id"))
+
+            if len(texts) >= batch_size:
+                self._add_batch(ids, texts, metas)
+                texts, metas, ids = [], [], []
+
+        if texts:
+            self._add_batch(ids, texts, metas)
+
+    def _add_batch(self, ids: Sequence[Any], texts: Sequence[str], metas: Sequence[Dict[str, Any]]) -> None:
+        if not texts:
+            return
+        if hasattr(self.text_encoder, "encode"):
+            vecs = self.text_encoder.encode(texts)
+        elif hasattr(self.text_encoder, "encode_text"):
+            vecs = self.text_encoder.encode_text(texts)
+        else:
+            raise AttributeError("Text encoder must expose encode() or encode_text()")
+
+        for doc_id, vec, meta in zip(ids, vecs, metas):
+            self.vector_store.add(doc_id=doc_id, vector=vec, metadata=meta)
 
     def search(self, query: str, top_k: int = 5, **_: Any) -> List[Dict[str, Any]]:
         q_vec = self._encode_text(query)
