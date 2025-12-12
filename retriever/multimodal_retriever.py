@@ -153,11 +153,29 @@ class MultimodalRetriever:
                 continue
 
             image_meta = self.image_metadata[idx]
+            # Handle different metadata formats (from processed data vs flickr8k)
+            # Processed data format: img_path, image_caption, page_idx, source_file
+            # Flickr8k format: image_id, caption, captions
+            img_path = image_meta.get("img_path") or image_meta.get("image_path", "")
+            caption = image_meta.get("caption") or image_meta.get("image_caption", "")
+            # image_caption might be a list, convert to string if needed
+            if isinstance(caption, list):
+                caption = caption[0] if caption else ""
+            captions = image_meta.get("captions", [])
+            if not captions and image_meta.get("image_caption"):
+                captions = image_meta.get("image_caption")
+                if not isinstance(captions, list):
+                    captions = [captions] if captions else []
+            
             results.append(
                 {
-                    "image_id": image_meta.get("image_id"),
-                    "caption": image_meta.get("caption", ""),
-                    "captions": image_meta.get("captions", []),
+                    "image_id": image_meta.get("image_id", ""),
+                    "img_path": img_path,
+                    "caption": caption,
+                    "captions": captions,
+                    "source_file": image_meta.get("source_file", ""),
+                    "page_id": image_meta.get("page_id") or image_meta.get("page_idx", ""),
+                    "source_url": image_meta.get("source_url", ""),
                     "score": float(distances[0][rank]),
                     "modality": "image",
                 }

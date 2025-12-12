@@ -120,3 +120,6 @@ def test_image_retrieval_scores():
 if __name__ == "__main__":
     test_image_retrieval_scores()
 
+
+
+

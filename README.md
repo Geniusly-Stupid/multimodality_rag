@@ -123,7 +123,7 @@ python evaluation/evaluate_rag.py --top_k 5
 ### 4. Run interactive RAG queries
 
 ```bash
-python rag_pipeline.py --query "Who is Jane Ballou?" --top_k 5
+python rag_pipeline.py --query "Is \"Stemming will always reduce the size of the vocabulary. \" true or false?" --top_k 5
 ```
 
 
