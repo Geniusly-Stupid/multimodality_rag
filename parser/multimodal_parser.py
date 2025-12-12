@@ -41,13 +41,17 @@ class MultimodalParser:
         # ------------------------------------------
         # Async caption function expected by modalprocessors
         # ------------------------------------------
-        async def blip_caption_func(prompt, system_prompt=None, history_messages=[], image_data=None, raw_image_path=None, **kwargs):
-            """
-            modalprocessors expect an async function.
-            RAGAnything passes base64 image_data, but we prefer using the real file path.
-            """
-            if raw_image_path:
-                return self.captioner.generate_caption(raw_image_path, page_id="chunk")
+        async def blip_caption_func(prompt, system_prompt=None, history_messages=[], image_data=None, **kwargs):
+            if image_data:
+                import base64, io
+                from PIL import Image
+
+                img_bytes = base64.b64decode(image_data)
+                img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
+
+                caption = self.captioner.generate_caption_from_pil(img)
+                return caption
+
             return "(no-image)"
 
         # Create processors
@@ -78,15 +82,17 @@ class MultimodalParser:
             # ----------------------
             # IMAGE CHUNK
             # ----------------------
-            if chunk.get("image"):
-                img_path = chunk["image"]
+            if chunk.get("type") == "image":
+                img_path = chunk["img_path"]
 
+                # base64 encode image bytes
                 with open(img_path, "rb") as f:
                     b64 = base64.b64encode(f.read()).decode()
 
                 modal_content = {
                     "img_path": img_path,
-                    "image_caption": chunk.get("metadata", {}).get("caption", []),
+                    "image_caption": chunk.get("image_caption", []),
+                    "image_footnote": chunk.get("image_footnote", []),
                 }
 
                 description, entity = await self.image_processor.process_multimodal_content(
@@ -94,8 +100,6 @@ class MultimodalParser:
                     content_type="image",
                     file_path=file_path,
                     entity_name="image",
-                    image_data=b64,
-                    raw_image_path=img_path,
                 )
 
                 out["enriched_description"] = description
