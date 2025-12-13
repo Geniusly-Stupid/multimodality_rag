@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Sequence
 from urllib.parse import urlparse, unquote
+import re
 
 from datasets import load_dataset
 
@@ -101,7 +102,17 @@ def chunk_source_tail(chunk: Dict) -> str:
     return ""
 
 
-def relevance_labels(retrieved: Sequence[Dict], gold_page_ids: Sequence[str], gold_links: Sequence[str], top_k: int) -> List[int]:
+def strip_hash(pid: str) -> str:
+    """
+    Remove trailing _[0-9a-f]{8} hash from page_id or source_name.
+    Example: 'punxsutawney_phil_40efb9a9' -> 'punxsutawney_phil'
+    """
+    if not pid:
+        return ""
+    pid = str(pid).lower()
+    return re.sub(r"_[0-9a-f]{8}$", "", pid)
+
+def relevance_labels(retrieved: Sequence[Dict], gold_links: Sequence[str], top_k: int) -> List[int]:
     """
     Binary relevance: 1 if retrieved chunk matches expected page ids or wiki link tails.
 
@@ -109,19 +120,19 @@ def relevance_labels(retrieved: Sequence[Dict], gold_page_ids: Sequence[str], go
     which should match txt filename stems stored in metadata['source_name'].
     Fallback uses wiki link tails if page_ids are absent.
     """
-    gold_ids = {str(pid).lower() for pid in gold_page_ids if pid}
     gold_tails = {link_tail(link) for link in gold_links if link}
     labels: List[int] = []
     for idx in range(min(top_k, len(retrieved))):
         chunk = retrieved[idx]
         source_id = (chunk.get("metadata") or {}).get("source_name") or chunk.get("page_id")
-        print(source_id)
-        print([str(source_id).lower() in gold_ids])
-        if source_id and str(source_id).lower() in gold_ids:
-            labels.append(1)
-            continue
-        tail = chunk_source_tail(chunk)
-        labels.append(1 if tail and tail in gold_tails else 0)
+
+        # Standardize (remove trailing hash)
+        stripped_sid = strip_hash(source_id)
+
+        print("source:", source_id, "→", stripped_sid)
+        print("gold:", gold_tails)
+        
+        labels.append(1 if stripped_sid and stripped_sid in gold_tails else 0)
     return labels
 
 
@@ -211,13 +222,14 @@ def evaluate(args) -> Dict:
     for idx, example in enumerate(dataset):
         if idx >= total:
             break
+        # print(example)
         prompt = example.get("prompt") or example.get("Prompt") or ""
         answer = example.get("answer") or example.get("Answer") or ""
         gold_links = parse_links(example.get("wiki_links"))
-        gold_page_ids = example.get("page_ids") or []
 
         output = pipeline.answer(prompt, top_k=args.top_k)
-        labels = relevance_labels(output.retrieved_chunks, gold_page_ids, gold_links, args.top_k)
+        labels = relevance_labels(output.retrieved_chunks, gold_links, args.top_k)
+        print("labels:", labels)
 
         em = exact_match(output.generated_answer, answer)
         f1 = f1_score(output.generated_answer, answer)
