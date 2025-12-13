@@ -1,72 +1,99 @@
-# Multimodal RAG with RAGAnything
+# Multimodal RAG
 
-This repository now centers on a minimal, caption-first Retrieval-Augmented Generation pipeline powered by **RAGAnything**. Documents are parsed via the unified `RAGAnythingParser`, chunked semantically, and indexed through a lightweight FAISS-backed `RetrieverAdapter` that embeds text and captions only (no image encoder required).
+This repository implements a **minimal, caption-first Multimodal Retrieval-Augmented Generation (RAG) pipeline**, built on top of **RAG-Anything**.
+The pipeline focuses on **textual representations only**, where visual content (e.g., images or tables) is incorporated via **captions or textual summaries**, without requiring an image encoder.
 
-## Architecture
-- **Parsing & Chunking**: `parser/raganything_parser.py` uses `MultiModalRAG` to load, parse, and chunk documents, returning normalized records with text, optional image path, and metadata.
-- **Retrieval**: `retriever/retriever_adapter.py` wraps a simple FAISS store (`FaissVectorStore`). Chunks are embedded using the text encoder only; image content is represented by its caption/text.
-- **Generation**: `generator/rag_generator.py` formats retrieved evidence (text + caption) into a prompt for the causal LM.
-- **Pipeline**: `rag_pipeline.py` wires parser → adapter → generator for end-to-end QA.
+Documents are parsed, semantically chunked, embedded, and indexed using a lightweight **FAISS** vector store. The system then performs retrieval and uses a large language model (LLM) to generate answers based on the retrieved evidence.
 
-## Workflow
-1) **Parse & index a document**
+For more implementation details and design rationale, please refer to the project report:
+👉 [https://ai.feishu.cn/wiki/H8ugwqrqGiGw6Ok21eYc0yhinjf?from=from_copylink](https://ai.feishu.cn/wiki/H8ugwqrqGiGw6Ok21eYc0yhinjf?from=from_copylink)
+
+
+## Architecture Overview
+
+The pipeline consists of four main components:
+
+### 1. Parsing & Chunking
+
+* Implemented in: `parser/parser.py`
+* Responsibilities:
+
+  * Load documents (PDFs or text files)
+  * Parse content using RAG-Anything
+  * Perform semantic chunking
+  * Output **normalized records** containing:
+
+    * text content
+    * optional image path
+    * metadata (document ID, section, etc.)
+
+### 2. Retrieval
+
+* Implemented in: `retriever/retriever_adapter.py`
+* Uses a lightweight FAISS-based vector store (`FaissVectorStore`)
+* Key characteristics:
+
+  * Only **text encoders** are used
+  * Image content is represented **indirectly via captions**
+  * Supports fast nearest-neighbor search over embedded chunks
+
+### 3. Generation
+
+* Implemented in: `generator/rag_generator.py`
+* Responsibilities:
+
+  * Format retrieved evidence (text + captions)
+  * Construct prompts for the causal language model
+  * Generate final answers using the LLM
+
+### 4. End-to-End Pipeline
+
+* Implemented in: `rag_pipeline.py`
+* Wires together:
+
+  * Vector database construction
+  * Retriever
+  * Generator
+* Enables end-to-end question answering from raw documents
+
+
+## How to Run the Pipeline
+
+Run the full RAG pipeline with a remote LLM:
+
 ```bash
-python rag_pipeline.py --doc_path /path/to/document --query "Your question"
-```
-This:
-- loads/parses/chunks the document with RAGAnything,
-- builds an in-memory FAISS index over text/caption fields,
-- runs retrieval with the caption/text encoder only,
-- generates an answer with the configured LM.
-
-2) **Programmatic usage**
-```python
-from parser.raganything_parser import RAGAnythingParser
-from retriever.retriever_adapter import FaissVectorStore, RetrieverAdapter
-from retriever.rag_retriever import TextEncoder, EncoderConfig
-from generator.rag_generator import RAGGenerator, GeneratorConfig
-
-parser = RAGAnythingParser()
-chunks = parser.parse("data/sample.pdf")
-
-encoder = TextEncoder(EncoderConfig())
-store = FaissVectorStore(metric="ip")
-retriever = RetrieverAdapter(text_encoder=encoder, vector_store=store)
-retriever.build_index(chunks)
-
-generator = RAGGenerator(GeneratorConfig())
-results = retriever.retrieve("What happened in 1984?", top_k=5)
-answer = generator.generate("What happened in 1984?", results)
+python rag_pipeline.py \
+  --doc_path data/frames_wiki_dataset \
+  --query "What is ...Baby One More Time?" \
+  --use_remote \
+  --remote_model "qwen/qwen3-next-80b-a3b-instruct" \
+  --remote_api_base "https://integrate.api.nvidia.com/v1" \
+  --remote_api_key [APIKEY]
 ```
 
-## Directory Snapshot
-- `parser/raganything_parser.py` — unified parser/chunker
-- `retriever/retriever_adapter.py` — caption/text-only adapter + FAISS store
-- `retriever/rag_retriever.py` — text encoder wrapper (BGE) reused by the adapter
-- `generator/rag_generator.py` — prompt builder + generation
-- `rag_pipeline.py` — CLI pipeline entrypoint
-- `tools/` & `evaluation/` — legacy utilities (kept for reference; not used by the new flow)
+This command will:
 
-## Requirements
-- Python 3.9+
-- PyTorch + transformers
-- faiss-cpu
-- raganything
+* Parse and chunk documents under `doc_path`
+* Build an **in-memory FAISS index** over text and caption fields
+* Retrieve relevant chunks using text embeddings only
+* Generate an answer using the specified remote LLM
 
-Install base deps:
+
+## How to Evaluate (Google Frames Benchmark)
+
+To evaluate the pipeline on the Google Frames Wiki dataset:
+
 ```bash
-pip install -r requirements.txt
-pip install faiss-cpu raganything
+python evaluation/evaluate_frames_wiki.py \
+  --doc_path data/frames_wiki_dataset/page \
+  --use_remote \
+  --remote_model "qwen/qwen3-next-80b-a3b-instruct" \
+  --remote_api_base "https://integrate.api.nvidia.com/v1" \
+  --remote_api_key [APIKEY]
 ```
 
-## Differences vs. Old Version
-- Replaced bespoke chunking/FAISS builders with RAGAnything’s unified parser.
-- Retrieval now indexes only text/captions; image encoder paths and CLIP-based image search are removed from the default pipeline.
-- Pipeline builds indexes on the fly per document (no prebuilt wiki/caption indices required).
-- README rewritten to match the new architecture; legacy scripts remain but are no longer primary entrypoints.
+This script will:
 
-## TODO / Future Work
-- Prune or port remaining legacy utilities to the RAGAnything flow.
-- Add persistence for FAISS indexes built from RAGAnything chunks.
-- Extend prompt formatting for richer multimodal metadata when available.
-
+* Build an in-memory FAISS index over text and caption fields
+* Run retrieval and generation for all evaluation queries
+* Compute evaluation metrics for the dataset
