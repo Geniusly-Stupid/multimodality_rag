@@ -97,3 +97,7 @@ This script will:
 * Build an in-memory FAISS index over text and caption fields
 * Run retrieval and generation for all evaluation queries
 * Compute evaluation metrics for the dataset
+
+
+## Reference
+1. https://github.com/HKUDS/RAG-Anything
